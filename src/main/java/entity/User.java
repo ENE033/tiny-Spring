@@ -11,6 +11,7 @@ import java.util.List;
 public class User {
     int age;
     String name;
+    Pet pet;
 
     public User() {
     }

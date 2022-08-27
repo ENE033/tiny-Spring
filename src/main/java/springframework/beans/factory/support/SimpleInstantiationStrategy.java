@@ -11,7 +11,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
     @Override
     public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor<?> ctor, Object... args) throws BeansException {
 
-        Object bean = null;
+        Object bean;
         try {
             if (ctor == null || args == null) {
                 bean = beanDefinition.getBeanClass().getDeclaredConstructor().newInstance();
@@ -19,9 +19,9 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
                 bean = ctor.newInstance(args);
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new BeansException("Instantiation of bean failed", e);
+            throw new BeansException(" Instantiation of bean failed ", e);
         } catch (NoSuchMethodException e) {
-            throw new BeansException("No such method", e);
+            throw new BeansException(beanName + " No such method ", e);
         }
         return bean;
 
