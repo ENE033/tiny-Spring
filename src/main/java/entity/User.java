@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Data
 @Component
 public class User {
@@ -22,10 +24,10 @@ public class User {
         this.age = age;
     }
 
-    public User(String name, Integer age) {
-        this.name = name;
-        this.age = age;
-    }
+//    public User(String name, Integer age) {
+//        this.name = name;
+//        this.age = age;
+//    }
 
     public void read() {
         System.out.println("hello");

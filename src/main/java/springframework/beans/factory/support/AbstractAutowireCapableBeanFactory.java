@@ -5,12 +5,11 @@ import springframework.beans.BeansException;
 import springframework.beans.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
 
     //创建bean的策略
-    private InstantiationStrategy instantiationStrategy;
+    private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
     @Override
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
@@ -20,19 +19,43 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     protected Object doCreateBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
+        System.out.println(instantiationStrategy.getClass());
         if (args == null) {
             return instantiationStrategy.instantiate(beanDefinition, beanName);
         } else {
             Constructor<?>[] constructors = beanDefinition.getBeanClass().getConstructors();
-            return instantiationStrategy.instantiate(beanDefinition, beanName, constructors, args);
+            int argsSize = args.length;
+            Constructor<?> ctorToUse = null;
+            int fixLength = 0;
+            for (Constructor<?> constructor : constructors) {
+                if (constructor.getParameters().length == argsSize) {
+                    ctorToUse = constructor;
+                    fixLength++;
+                }
+            }
+            if (fixLength == 0) {
+                throw new BeansException("Could not resolve matching constructor on bean class [" + beanDefinition.getBeanClass().getName() + "]");
+            } else if (fixLength > 1) {
+                throw new BeansException("Ambiguous constructor matches found on bean class [" + beanDefinition.getBeanClass().getName() + "]");
+            }
+            return instantiationStrategy.instantiate(beanDefinition, beanName, ctorToUse, args);
         }
     }
 
-    public InstantiationStrategy getInstantiationStrategy() {
-        return instantiationStrategy;
+//    public InstantiationStrategy getInstantiationStrategy() {
+//        return instantiationStrategy;
+//    }
+//
+//    public void setInstantiationStrategy(InstantiationStrategy instantiationStrategy) {
+//        this.instantiationStrategy = instantiationStrategy;
+//    }
+
+    public void setSimpleStrategy(boolean isSimple) {
+        if (isSimple) {
+            this.instantiationStrategy = new SimpleInstantiationStrategy();
+        } else {
+            this.instantiationStrategy = new CglibSubclassingInstantiationStrategy();
+        }
     }
 
-    public void setInstantiationStrategy(InstantiationStrategy instantiationStrategy) {
-        this.instantiationStrategy = instantiationStrategy;
-    }
 }

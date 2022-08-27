@@ -1,6 +1,5 @@
 package springframework.beans.factory.support;
 
-import org.springframework.lang.Nullable;
 import springframework.beans.BeansException;
 import springframework.beans.factory.BeanFactory;
 import springframework.beans.factory.config.BeanDefinition;
@@ -18,13 +17,13 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     }
 
     @Override
-    public Object getBean(String name, Object... args) throws BeansException {
-        return doGetBean(name, Object.class, args);
+    public Object getBean(String beanName, Object... args) throws BeansException {
+        return doGetBean(beanName, Object.class, args);
     }
 
     @Override
-    public <T> T getBean(String name, Class<T> requireType, Object... args) throws BeansException {
-        return doGetBean(name, requireType, args);
+    public <T> T getBean(String beanName, Class<T> requireType, Object... args) throws BeansException {
+        return doGetBean(beanName, requireType, args);
     }
 
     public <T> T doGetBean(String beanName, Class<T> requireType, Object[] args) throws BeansException {
