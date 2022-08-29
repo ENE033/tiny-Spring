@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
+
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry, ResourceLoader resourceLoader) {
         super(registry, resourceLoader);
     }

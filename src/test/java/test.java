@@ -78,7 +78,9 @@ public class test {
 
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
-        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("classpath:xml.xml");
+//        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("classpath:xml.xml");
+//        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("D:\\java_workspace\\Spring\\src\\main\\resources\\xml.xml");
+        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("http://www.woaiguozhi.top/pan/Files/xml.xml");
         int i = xmlBeanDefinitionReader.loadBeanDefinitions(resource);
         User user = beanFactory.getBean("user", User.class, "xiaoming", 12, new Pet("str", 12));
         System.out.println(user);
