@@ -61,13 +61,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             if (document == null) {
                 throw new BeansException(" Xml parse fail ");
             }
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (BeansException e) {
+        } catch (SAXException | IOException | ParserConfigurationException | BeansException e) {
             e.printStackTrace();
         }
         assert document != null;

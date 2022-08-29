@@ -11,7 +11,10 @@
 
     <bean id="user" class="entity.User">
         <property name="age" value="12"/>
-        <property name="name" value="ming"/>
+        <!--        <property name="name" value="ming"/>-->
         <property name="pet" ref="pet"/>
     </bean>
+
+    <bean class="common.MyBeanFactoryPostProcessor"/>
+
 </beans>

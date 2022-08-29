@@ -1,28 +1,18 @@
 import entity.Pet;
 import entity.User;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.config.BeanReference;
 import springframework.beans.factory.support.DefaultListableBeanFactory;
 import springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import springframework.context.ApplicationContext;
+import springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.core.io.Resource;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class test {
-    @Test
-    public void test0() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
-        User user = (User) context.getBean("user");
-        System.out.println(user.getClass());
-    }
 
     @Test
     public void test1() {
@@ -74,19 +64,27 @@ public class test {
     }
 
     @Test
-    public void test04() {
-
+    public void test4() {
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
-//        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("classpath:xml.xml");
+        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("classpath:xml.xml");
 //        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("D:\\java_workspace\\Spring\\src\\main\\resources\\xml.xml");
-        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("http://www.woaiguozhi.top/pan/Files/xml.xml");
+//        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("http://www.woaiguozhi.top/pan/Files/xml.xml");
         int i = xmlBeanDefinitionReader.loadBeanDefinitions(resource);
         User user = beanFactory.getBean("user", User.class, "xiaoming", 12, new Pet("str", 12));
         System.out.println(user);
-
         System.out.println(user.getClass().getSuperclass());
+    }
 
+
+    @Test
+    public void test5() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+
+        User user = context.getBean("user", User.class);
+        System.out.println(user);
+        Pet pet = context.getBean("pet", Pet.class);
+        System.out.println(pet);
     }
 
 

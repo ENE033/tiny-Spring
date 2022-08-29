@@ -3,6 +3,8 @@ package springframework.beans.factory.support;
 import cn.hutool.core.bean.BeanUtil;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
+import springframework.beans.factory.config.AutowireCapableBeanFactory;
+import springframework.beans.factory.config.BeanPostProcessor;
 import springframework.beans.factory.config.BeanReference;
 import springframework.beans.BeansException;
 import springframework.beans.factory.config.BeanDefinition;
@@ -10,7 +12,7 @@ import springframework.beans.factory.config.BeanDefinition;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
-public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
+public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
 
     //创建bean的策略
     private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
@@ -95,18 +97,76 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                  * old version
                  */
                 //                try {
-//                    Field field = bean.getClass().getDeclaredField(name);
-//                    field.setAccessible(true);
-//                    field.set(bean, value);
-//                } catch (NoSuchFieldException e) {
-//                    throw new BeansException(beanName + " No Such Field：" + name);
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
+                //                    Field field = bean.getClass().getDeclaredField(name);
+                //                    field.setAccessible(true);
+                //                    field.set(bean, value);
+                //                } catch (NoSuchFieldException e) {
+                //                    throw new BeansException(beanName + " No Such Field：" + name);
+                //                } catch (IllegalAccessException e) {
+                //                    e.printStackTrace();
+                //                }
             }
         } catch (BeansException e) {
             throw new BeansException(" Error setting property values：" + beanName + " Cause: " + e.getMessage());
-//            e.printStackTrace();
         }
+    }
+
+
+    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        //执行 BeanPostProcessor Before 处理
+        Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+        //激活初始化方法
+        invokeInitMethods(beanName, wrappedBean, beanDefinition);
+        //执行 BeanPostProcessor After 处理
+        wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
+        return wrappedBean;
+    }
+
+    private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
+
+    }
+
+    /**
+     * 执行初始化前的后置处理器
+     *
+     * @param existingBean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
+    @Override
+    public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException {
+        Object result = existingBean;
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            Object current = beanPostProcessor.postProcessBeforeInitialization(existingBean, beanName);
+            if (current == null) {
+                return result;
+            } else {
+                result = current;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 执行初始化后的后置处理器
+     *
+     * @param existingBean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
+    @Override
+    public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException {
+        Object result = existingBean;
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            Object current = beanPostProcessor.postProcessAfterInitialization(existingBean, beanName);
+            if (current == null) {
+                return result;
+            } else {
+                result = current;
+            }
+        }
+        return result;
     }
 }
