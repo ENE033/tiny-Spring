@@ -13,7 +13,6 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 
     @Override
     public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor<?> ctor, Object... args) throws BeansException {
-
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(beanDefinition.getBeanClass());
         enhancer.setCallback(new NoOp() {

@@ -4,8 +4,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="user" class="entity.User" scope="prototype">
-<!--        <constructor-arg name="name" value="weq"/>-->
-<!--        <constructor-arg name="age" value="12"/>-->
+    <bean id="pet" class="entity.Pet">
+        <property name="age" value="2"/>
+        <property name="name" value="peter"/>
+    </bean>
+
+    <bean id="user" class="entity.User">
+        <!--        <property name="age" value="12"/>-->
+        <!--        <property name="name" value="ming"/>-->
+        <!--        <property name="pet" ref="pet"/>-->
     </bean>
 </beans>

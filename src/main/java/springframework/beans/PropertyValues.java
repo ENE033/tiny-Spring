@@ -1,4 +1,4 @@
-package springframework.beans.factory;
+package springframework.beans;
 
 import java.util.ArrayList;
 import java.util.Arrays;

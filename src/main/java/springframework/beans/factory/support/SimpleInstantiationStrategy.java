@@ -5,7 +5,6 @@ import springframework.beans.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Parameter;
 
 public class SimpleInstantiationStrategy implements InstantiationStrategy {
     @Override

@@ -25,10 +25,11 @@ public class User {
         this.age = age;
     }
 
-//    public User(String name, Integer age) {
-//        this.name = name;
-//        this.age = age;
-//    }
+    public User(String name, Integer age, Pet pet) {
+        this.name = name;
+        this.age = age;
+        this.pet = pet;
+    }
 
     public void read() {
         System.out.println("hello");

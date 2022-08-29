@@ -1,4 +1,4 @@
-package springframework.beans.factory;
+package springframework.beans;
 
 public class PropertyValue {
     private final String name;

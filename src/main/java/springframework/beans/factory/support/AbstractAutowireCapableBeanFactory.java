@@ -1,9 +1,9 @@
 package springframework.beans.factory.support;
 
-import springframework.beans.factory.PropertyValue;
-import springframework.beans.factory.PropertyValues;
+import cn.hutool.core.bean.BeanUtil;
+import springframework.beans.PropertyValue;
+import springframework.beans.PropertyValues;
 import springframework.beans.factory.config.BeanReference;
-import springframework.beans.factory.support.InstantiationStrategy;
 import springframework.beans.BeansException;
 import springframework.beans.factory.config.BeanDefinition;
 
@@ -88,21 +88,25 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                     BeanReference beanReference = (BeanReference) value;
                     value = getBean(beanReference.getBeanName());
                 }
-                try {
-                    Field field = bean.getClass().getDeclaredField(name);
-                    field.setAccessible(true);
-                    field.set(bean, value);
-                } catch (NoSuchFieldException e) {
-                    throw new BeansException(beanName + " No Such Field：" + name);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                //用BeanUtil进行属性注入
+                BeanUtil.setFieldValue(bean, name, value);
+
+                /**
+                 * old version
+                 */
+                //                try {
+//                    Field field = bean.getClass().getDeclaredField(name);
+//                    field.setAccessible(true);
+//                    field.set(bean, value);
+//                } catch (NoSuchFieldException e) {
+//                    throw new BeansException(beanName + " No Such Field：" + name);
+//                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
             }
         } catch (BeansException e) {
             throw new BeansException(" Error setting property values：" + beanName + " Cause: " + e.getMessage());
+//            e.printStackTrace();
         }
-
     }
-
-
 }

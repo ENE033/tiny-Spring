@@ -1,7 +1,7 @@
 package springframework.beans.factory.config;
 
 import org.springframework.lang.Nullable;
-import springframework.beans.factory.PropertyValues;
+import springframework.beans.PropertyValues;
 
 public class BeanDefinition {
 
@@ -11,6 +11,7 @@ public class BeanDefinition {
 
     public BeanDefinition(Class<?> beanClass) {
         this.beanClass = beanClass;
+        this.propertyValues = new PropertyValues();
     }
 
     public BeanDefinition(Class<?> beanClass, PropertyValues propertyValues) {
