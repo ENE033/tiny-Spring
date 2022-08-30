@@ -1,9 +1,8 @@
 package springframework.core.io;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import springframework.beans.BeansException;
+
+import java.io.*;
 
 public class FileSystemResource implements Resource {
     String path;
@@ -19,10 +18,17 @@ public class FileSystemResource implements Resource {
     }
 
     @Override
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() {
         if (file == null) {
             file = new File(path);
         }
-        return new FileInputStream(file);
+        InputStream fileInputStream = null;
+
+        try {
+            fileInputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new BeansException(" File not found ：" + file.getName(), e);
+        }
+        return fileInputStream;
     }
 }

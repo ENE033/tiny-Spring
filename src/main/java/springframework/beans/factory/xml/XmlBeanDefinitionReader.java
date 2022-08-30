@@ -42,8 +42,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         try {
             inputStream = resource.getInputStream();
             count = doLoadBeanDefinitions(inputStream);
-        } catch (IOException e) {
-            throw new BeansException(" IOException parsing XML document from " + resource, e);
+        } catch (BeansException e) {
+            throw new BeansException(" Load bean definitions fail ", e);
         }
         return count;
     }
@@ -55,19 +55,18 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
      * @return
      */
     public int doLoadBeanDefinitions(InputStream inputStream) {
-        Document document = null;
+        Document document;
         try {
             document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
-            if (document == null) {
-                throw new BeansException(" Xml parse fail ");
-            }
-        } catch (SAXException | IOException | ParserConfigurationException | BeansException e) {
-            e.printStackTrace();
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new BeansException(" Xml parse fail ", e);
         }
         assert document != null;
         Element element = document.getDocumentElement();
 
         NodeList childNodes = element.getChildNodes();
+
+        int beanSize = 0;
 
         for (int i = 0; i < childNodes.getLength(); i++) {
             //判断元素
@@ -87,31 +86,29 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             //获取bean的类名
             String className = bean.getAttribute("class");
             //获取bean的类对象
-            Class<?> clazz = null;
+            Class<?> clazz;
             try {
                 //通过反射获取bean的类对象
-                clazz = Class.forName(className);
+                //clazz = Class.forName(className);
+                //使用类加载器获取类，不会触发类的静态方法，forName方法会触发类的静态方法
+                clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                throw new BeansException(" Class does not exist ：" + className, e);
             }
             //先判断id是否为空，id的优先级比name高
             String beanName = id != null && !id.isEmpty() ? id : name;
+
             //id和name都为空则使用简单类名，并将首字母小写
             if (beanName == null || "".equals(beanName)) {
-                assert clazz != null;
                 beanName = clazz.getSimpleName();
                 char[] chars = beanName.toCharArray();
                 chars[0] = Character.toLowerCase(chars[0]);
                 beanName = new String(chars);
             }
 
-            //判断beanName有没有重复
-            try {
-                if (getRegistry().containsBeanDefinition(beanName)) {
-                    throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
-                }
-            } catch (BeansException e) {
-                e.printStackTrace();
+            //判断beanName是否重复
+            if (getRegistry().containsBeanDefinition(beanName)) {
+                throw new BeansException(" Duplicate beanName [" + beanName + "] is not allowed ");
             }
 
             //创建beanDefinition
@@ -140,10 +137,12 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 //添加属性
                 beanDefinition.getPropertyValues().addPropertyValue(pv);
             }
+
             //注册到beanDefinition
             getRegistry().registerBeanDefinition(beanName, beanDefinition);
+            beanSize++;
         }
-        return childNodes.getLength();
+        return beanSize;
     }
 
 }

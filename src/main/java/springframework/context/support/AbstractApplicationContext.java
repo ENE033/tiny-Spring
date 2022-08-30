@@ -13,14 +13,31 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     @Override
     public void refresh() throws BeansException {
+
+        //创建beanFactory并注册所有beanDefinition
         refreshBeanFactory();
 
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 
+        //激活所有beanFactoryPostProcessors
         invokeBeanFactoryPostProcessors(beanFactory);
 
+        //注册所有BeanPostProcessors
         registerBeanPostProcessors(beanFactory);
 
+        //预实例化所有bean
+        beanFactory.preInstantiateSingletons();
+
+    }
+
+    @Override
+    public void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+    }
+
+    @Override
+    public void close() {
+        getBeanFactory().destroySingletons();
     }
 
     /**
@@ -36,7 +53,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      *
      * @return
      */
-    protected abstract ConfigurableListableBeanFactory getBeanFactory();
+    public abstract ConfigurableListableBeanFactory getBeanFactory();
 
 
     /**
@@ -63,11 +80,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         }
     }
 
+    /**
+     * 获取指定类的bean，可用于获取beanFactoryPostProcessor和beanPostProcessor
+     *
+     * @param type
+     * @param <T>
+     * @return
+     * @throws BeansException
+     */
     @Override
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
         return getBeanFactory().getBeansOfType(type);
     }
 
+    /**
+     * 获取beanDefinitionMap中的所有bean的beanName
+     *
+     * @return
+     */
     @Override
     public String[] getBeanDefinitionNames() {
         return getBeanFactory().getBeanDefinitionNames();

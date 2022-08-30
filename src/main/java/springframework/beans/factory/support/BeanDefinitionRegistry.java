@@ -19,5 +19,5 @@ public interface BeanDefinitionRegistry {
 
     BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
-    public String[] getBeanDefinitionNames();
+    String[] getBeanDefinitionNames();
 }

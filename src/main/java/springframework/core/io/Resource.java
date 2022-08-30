@@ -11,6 +11,6 @@ public interface Resource {
      * @return
      * @throws IOException
      */
-    InputStream getInputStream() throws IOException;
+    InputStream getInputStream();
 
 }

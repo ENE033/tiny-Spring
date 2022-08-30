@@ -1,5 +1,6 @@
 package springframework.beans.factory.support;
 
+import org.springframework.context.annotation.Bean;
 import springframework.beans.BeansException;
 import springframework.beans.factory.config.BeanDefinition;
 
@@ -9,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 public class SimpleInstantiationStrategy implements InstantiationStrategy {
     @Override
     public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor<?> ctor, Object... args) throws BeansException {
-
         Object bean;
         try {
             if (ctor == null || args == null) {
@@ -17,10 +17,14 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
             } else {
                 bean = ctor.newInstance(args);
             }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new BeansException(" Instantiation of bean failed ", e);
         } catch (NoSuchMethodException e) {
-            throw new BeansException(beanName + " No such method ", e);
+            throw new BeansException(" No such method ：" + beanName, e);
+        } catch (IllegalAccessException e) {
+            throw new BeansException(" Method does not have access ：" + beanName, e);
+        } catch (InstantiationException e) {
+            throw new BeansException(" Class object cannot be instantiated ：" + beanName, e);
+        } catch (InvocationTargetException e) {
+            throw new BeansException(" Instantiation of bean failed ：" + beanName, e);
         }
         return bean;
 

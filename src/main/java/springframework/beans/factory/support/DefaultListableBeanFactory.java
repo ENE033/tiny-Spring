@@ -28,14 +28,21 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     @Override
     @SuppressWarnings("unchecked")
+    /**
+     * 实例化并获取指定类型的bean
+     */
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
         Map<String, T> result = new HashMap<>();
-        beanDefinitionMap.forEach((beanName, beanDefinition) -> {
-            Class<?> beanClass = beanDefinition.getBeanClass();
-            if (type.isAssignableFrom(beanClass)) {
-                result.put(beanName, (T) getBean(beanName));
-            }
-        });
+        try {
+            beanDefinitionMap.forEach((beanName, beanDefinition) -> {
+                Class<?> beanClass = beanDefinition.getBeanClass();
+                if (type.isAssignableFrom(beanClass)) {
+                    result.put(beanName, (T) getBean(beanName));
+                }
+            });
+        } catch (BeansException e) {
+            throw new BeansException(" Failed to get the specified class ：" + type.getName(), e);
+        }
         return result;
     }
 
@@ -52,6 +59,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     @Override
     public void preInstantiateSingletons() throws BeansException {
-
+        for (String beanDefinitionName : getBeanDefinitionNames()) {
+            getBean(beanDefinitionName);
+        }
     }
 }

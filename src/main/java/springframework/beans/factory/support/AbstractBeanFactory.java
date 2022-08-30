@@ -36,11 +36,21 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     public <T> T doGetBean(String beanName, Class<T> requireType, Object[] args) throws BeansException {
         Object sharedInstance = getSingleton(beanName);
-        if (sharedInstance != null) {
-            return requireType.cast(sharedInstance);
+        T castedInstance;
+        try {
+            if (sharedInstance == null) {
+                BeanDefinition beanDefinition = getBeanDefinition(beanName);
+                castedInstance = requireType.cast(createBean(beanName, beanDefinition, args));
+            } else {
+                castedInstance = requireType.cast(sharedInstance);
+            }
+        } catch (ClassCastException e) {
+            throw new BeansException(" Class cast failed ", e);
         }
-        BeanDefinition beanDefinition = getBeanDefinition(beanName);
-        return requireType.cast(createBean(beanName, beanDefinition, args));
+        if (castedInstance == null) {
+            throw new BeansException(" castedInstance is null ");
+        }
+        return castedInstance;
     }
 
 

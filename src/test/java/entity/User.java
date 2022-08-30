@@ -13,6 +13,10 @@ public class User {
     String name;
     Pet pet;
 
+    static {
+        System.out.println(" i am user ");
+    }
+
     public User() {
     }
 
@@ -24,6 +28,12 @@ public class User {
         this.name = name;
         this.age = age;
     }
+
+    public User(String name, String vice) {
+        this.name = name;
+        System.out.println(vice);
+    }
+
 
     public User(String name, Integer age, Pet pet) {
         this.name = name;

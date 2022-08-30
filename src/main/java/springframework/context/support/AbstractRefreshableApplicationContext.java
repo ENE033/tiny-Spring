@@ -9,7 +9,9 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 
     @Override
     protected void refreshBeanFactory() throws BeansException {
+        //创建beanFactory
         DefaultListableBeanFactory beanFactory = createBeanFactory();
+        //注册所有beanDefinition
         loadBeanDefinitions(beanFactory);
         this.beanFactory = beanFactory;
     }
@@ -18,8 +20,9 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
         return new DefaultListableBeanFactory();
     }
 
+
     @Override
-    protected ConfigurableListableBeanFactory getBeanFactory() {
+    public ConfigurableListableBeanFactory getBeanFactory() {
         return this.beanFactory;
     }
 

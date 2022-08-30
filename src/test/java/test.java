@@ -1,6 +1,7 @@
 import entity.Pet;
 import entity.User;
 import org.junit.Test;
+import springframework.beans.BeansException;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
 import springframework.beans.factory.config.BeanDefinition;
@@ -10,6 +11,10 @@ import springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import springframework.context.ApplicationContext;
 import springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.core.io.Resource;
+
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 
 public class test {
@@ -79,12 +84,20 @@ public class test {
 
     @Test
     public void test5() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
 
-        User user = context.getBean("user", User.class);
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        User user = context.getBean("user", User.class, "红", 100);
         System.out.println(user);
-        Pet pet = context.getBean("pet", Pet.class);
-        System.out.println(pet);
+    }
+
+    @Test
+    public void test6() {
+
+
+    }
+
+    @Test
+    public void test7() {
     }
 
 

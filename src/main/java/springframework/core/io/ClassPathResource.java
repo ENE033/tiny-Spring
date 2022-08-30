@@ -1,5 +1,7 @@
 package springframework.core.io;
 
+import springframework.beans.BeansException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,13 +49,12 @@ public class ClassPathResource implements Resource {
      * 使用类加载器获取path文件的输入流
      *
      * @return
-     * @throws IOException
      */
     @Override
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() {
         InputStream is = classLoader.getResourceAsStream(path);
         if (is == null) {
-            throw new FileNotFoundException(this.path + " does not exist");
+            throw new BeansException(this.path + " does not exist");
         }
         return is;
     }

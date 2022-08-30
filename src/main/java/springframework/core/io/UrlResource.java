@@ -16,19 +16,17 @@ public class UrlResource implements Resource {
     }
 
     @Override
-    public InputStream getInputStream() throws IOException {
-        URLConnection urlConnection = this.Url.openConnection();
-        InputStream inputStream = null;
+    public InputStream getInputStream() {
+        URLConnection urlConnection = null;
+        InputStream inputStream;
         try {
+            urlConnection = this.Url.openConnection();
             inputStream = urlConnection.getInputStream();
-            if (inputStream == null) {
-                throw new BeansException(" InputStream is null ");
-            }
-        } catch (IOException | BeansException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
             if (urlConnection instanceof HttpURLConnection) {
                 ((HttpURLConnection) urlConnection).disconnect();
             }
+            throw new BeansException(" Obtain Url inputStream fail ：" + this.Url.getPath(), e);
         }
         return inputStream;
     }

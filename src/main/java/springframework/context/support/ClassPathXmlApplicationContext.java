@@ -5,6 +5,8 @@ import springframework.core.io.ClassPathResource;
 import springframework.core.io.Resource;
 
 public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContext {
+
+
     private Resource[] configResources;
 
     public ClassPathXmlApplicationContext() {
@@ -25,6 +27,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
          */
         refresh();
     }
+
 
     @Override
     protected Resource[] getConfigLocations() {
