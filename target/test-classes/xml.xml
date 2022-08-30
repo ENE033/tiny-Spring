@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean class="common.MyBeanFactoryPostProcessor"/>
+
+    <bean class="common.MyBeanPostProcessor"/>
+
+    <bean id="pet" class="entity.Pet">
+        <property name="age" value="2"/>
+        <property name="name" value="peter"/>
+    </bean>
+
+    <bean id="user" class="entity.User">
+<!--        <property name="age" value="12"/>-->
+<!--        <property name="name" value="ming"/>-->
+<!--        <property name="pet" ref="pet"/>-->
+    </bean>
+
+</beans>
