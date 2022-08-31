@@ -6,3 +6,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+#哥们的笔记
+/tiny-Spring.md

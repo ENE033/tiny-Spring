@@ -4,6 +4,8 @@ import springframework.beans.BeansException;
 
 public interface ConfigurableApplicationContext extends ApplicationContext {
 
+    String SHUTDOWN_HOOK_THREAD_NAME = "SpringContextShutdownHook";
+
     /**
      * 刷新容器
      *

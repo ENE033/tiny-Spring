@@ -1,5 +1,6 @@
 import entity.Pet;
 import entity.User;
+import entity.UserDao;
 import org.junit.Test;
 import springframework.beans.BeansException;
 import springframework.beans.PropertyValue;
@@ -9,11 +10,13 @@ import springframework.beans.factory.config.BeanReference;
 import springframework.beans.factory.support.DefaultListableBeanFactory;
 import springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import springframework.context.ApplicationContext;
+import springframework.context.support.AbstractApplicationContext;
 import springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.core.io.Resource;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 
@@ -84,7 +87,6 @@ public class test {
 
     @Test
     public void test5() {
-
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
         User user = context.getBean("user", User.class, "红", 100);
         System.out.println(user);
@@ -92,8 +94,11 @@ public class test {
 
     @Test
     public void test6() {
-
-
+        AbstractApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        context.registerShutdownHook();
+        UserDao userDao = context.getBean("userDao", UserDao.class);
+        System.out.println(userDao.getClass());
+        System.out.println(((Object) userDao).getClass());
     }
 
     @Test

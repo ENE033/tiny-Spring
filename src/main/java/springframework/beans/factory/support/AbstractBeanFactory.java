@@ -1,7 +1,6 @@
 package springframework.beans.factory.support;
 
 import springframework.beans.BeansException;
-import springframework.beans.factory.BeanFactory;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.config.BeanPostProcessor;
 import springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
 
-
+    //bean后置增强器列表
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     @Override
