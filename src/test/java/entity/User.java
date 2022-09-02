@@ -6,11 +6,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Data
+//@Data
 public class User implements MethodTest {
     int age;
     String name;
     Pet pet;
+
 
     public User() {
     }

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
+
+
     //一级缓存
     private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
     //实现了DisposableBean的bean缓存

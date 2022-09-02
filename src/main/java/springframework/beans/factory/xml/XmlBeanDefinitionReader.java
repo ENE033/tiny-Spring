@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Modifier;
 
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
@@ -89,6 +90,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String initMethod = bean.getAttribute("init-method");
             //获取bean的销毁方法
             String destroyMethod = bean.getAttribute("destroy-method");
+            //获取bean的作用域
+            String scope = bean.getAttribute("scope");
+
             //获取bean的类对象
             Class<?> clazz;
             try {
@@ -99,6 +103,22 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             } catch (ClassNotFoundException e) {
                 throw new BeansException(" Class does not exist ：" + className, e);
             }
+
+
+            /**
+             * 检查是否接口
+             */
+            if (Modifier.isInterface(clazz.getModifiers())) {
+                throw new BeansException(" Failed to load the beanDefinition of [" + className + "]: Specified class is an interface ");
+            }
+
+            /**
+             * 检查是否抽象类
+             */
+            if (Modifier.isAbstract(clazz.getModifiers())) {
+                throw new BeansException(" Failed to load the beanDefinition of [" + className + "]: Is it an abstract class? ");
+            }
+
             //先判断id是否为空，id的优先级比name高
             String beanName = id != null && !id.isEmpty() ? id : name;
 
@@ -125,10 +145,14 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             //创建beanDefinition
             BeanDefinition beanDefinition = new BeanDefinition(clazz);
 
-            //设置初始化方法
+            //注册初始化方法
             beanDefinition.setInitMethodName(initMethod);
-            //设置销毁方法
+            //注册销毁方法
             beanDefinition.setDestroyMethodName(destroyMethod);
+            //注册bean的作用域
+            if (!"".equals(scope)) {
+                beanDefinition.setScope(scope);
+            }
 
             for (int j = 0; j < bean.getChildNodes().getLength(); j++) {
                 //判断元素

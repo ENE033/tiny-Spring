@@ -1,9 +1,12 @@
 package springframework.beans.factory.config;
 
-import org.springframework.lang.Nullable;
 import springframework.beans.PropertyValues;
 
 public class BeanDefinition {
+
+    String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
+
+    String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
     private volatile Object beanClass;
 
@@ -13,6 +16,13 @@ public class BeanDefinition {
 
     private String destroyMethodName;
 
+    private String scope = SCOPE_SINGLETON;
+
+    private boolean singleton = true;
+
+    private boolean prototype = false;
+
+
     public BeanDefinition(Class<?> beanClass) {
         this.beanClass = beanClass;
         this.propertyValues = new PropertyValues();
@@ -21,6 +31,24 @@ public class BeanDefinition {
     public BeanDefinition(Class<?> beanClass, PropertyValues propertyValues) {
         this.beanClass = beanClass;
         this.propertyValues = propertyValues;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+        this.singleton = SCOPE_SINGLETON.equals(scope);
+        this.prototype = SCOPE_PROTOTYPE.equals(scope);
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public boolean isSingleton() {
+        return singleton;
+    }
+
+    public boolean isPrototype() {
+        return prototype;
     }
 
     public PropertyValues getPropertyValues() {
@@ -35,7 +63,7 @@ public class BeanDefinition {
         return (Class<?>) beanClass;
     }
 
-    public void setBeanClass(@Nullable Class<?> beanClass) {
+    public void setBeanClass(Class<?> beanClass) {
         this.beanClass = beanClass;
     }
 

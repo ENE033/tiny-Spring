@@ -2,6 +2,7 @@ package springframework.beans.factory.support;
 
 import springframework.beans.BeansException;
 import springframework.beans.ClassUtil;
+import springframework.beans.factory.FactoryBean;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.config.BeanPostProcessor;
 import springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -9,7 +10,7 @@ import springframework.beans.factory.config.ConfigurableBeanFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     //bean后置增强器列表
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
@@ -42,19 +43,34 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         try {
             if (sharedInstance == null) {
                 BeanDefinition beanDefinition = getBeanDefinition(beanName);
-                castedInstance = requireType.cast(createBean(beanName, beanDefinition, args));
+                Object bean = createBean(beanName, beanDefinition, args);
+                Object objectForBeanInstance = getObjectForBeanInstance(bean, beanName);
+                castedInstance = requireType.cast(objectForBeanInstance);
             } else {
-                castedInstance = requireType.cast(sharedInstance);
+                Object objectForBeanInstance = getObjectForBeanInstance(sharedInstance, beanName);
+                castedInstance = requireType.cast(objectForBeanInstance);
             }
         } catch (ClassCastException e) {
-            throw new BeansException(" Class cast failed ", e);
+            throw new BeansException(" Class cast failed ：", e);
         }
         if (castedInstance == null) {
-            throw new BeansException(" castedInstance is null ");
+            throw new BeansException(" Instance is null ：" + beanName);
         }
         return castedInstance;
     }
 
+
+    private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        if (!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+        Object object = getCachedObjectForFactoryBean(beanName);
+        if (object == null) {
+            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+            object = getObjectFromFactoryBean(factoryBean, beanName);
+        }
+        return object;
+    }
 
     @Override
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {

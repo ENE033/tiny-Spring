@@ -1,7 +1,4 @@
-import entity.KnownAll;
-import entity.Pet;
-import entity.User;
-import entity.UserDao;
+import entity.*;
 import org.junit.Test;
 import springframework.beans.BeanUtils;
 import springframework.beans.BeansException;
@@ -108,7 +105,6 @@ public class test {
 
     @Test
     public void test7() {
-
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
         System.out.println(context);
         KnownAll knownAll = context.getBean("knownAll", KnownAll.class);
@@ -116,9 +112,7 @@ public class test {
         System.out.println(knownAll.getApplicationContext());
         System.out.println(knownAll.getBeanName());
         System.out.println(knownAll.getBeanFactory());
-
 //        for (Method declaredMethod : AbstractRefreshableApplicationContext.class.getDeclaredMethods()) {
-//
 //            System.out.println(declaredMethod);
 //        }
         try {
@@ -126,8 +120,28 @@ public class test {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void test8() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
+//        System.out.println(beanFactory.getSingletonObjects().entrySet());
+//        System.out.println(context.getBean("pet"));
+//        System.out.println(context.getBean("pet"));
+//        User user = context.getBean("user", User.class);
+//        User user1 = context.getBean("user", User.class);
+//        System.out.println(user);
+//        System.out.println(user1);
 
     }
 
 
+    @Test
+    public void test9() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        PetService petService = context.getBean("petService", PetService.class);
+        IPetDao iPetDao = petService.getiPetDao();
+        System.out.println(iPetDao.queryPetName("12388"));
+    }
 }

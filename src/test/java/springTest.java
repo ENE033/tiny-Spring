@@ -1,11 +1,14 @@
+import entity.PetService;
 import entity.User;
 import entity.UserDao;
 import entity.spring.KnownAll;
 import org.junit.Test;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class springTest {
@@ -35,7 +38,10 @@ public class springTest {
     @Test
     public void test2() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-        context.getBean("user");
+        PetService petService = context.getBean("petService", PetService.class);
+        petService.getiPetDao().queryPetName("eqw");
+//        context.getBean("user");
+//        context.getBean("user");
     }
 
 

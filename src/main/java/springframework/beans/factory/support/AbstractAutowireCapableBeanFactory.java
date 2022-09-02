@@ -56,12 +56,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             applyPropertyValues(beanName, bean, beanDefinition);
             //初始化bean
             bean = initializeBean(beanName, bean, beanDefinition);
-            //注册单例bean
-            addSingleton(beanName, bean);
             //注册实现了DisposableBean或destroy-method不为空的bean, 等销毁时再执行销毁方法
             registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
         } catch (BeansException e) {
             throw new BeansException(" Bean register fail : " + beanName, e);
+        }
+        //如果是个单例bean，注册singletonObjects中
+        if (beanDefinition.isSingleton()) {
+            addSingleton(beanName, bean);
+        } else if (!beanDefinition.isPrototype()) {
+            //如果既不是单例又不是原型，暂且抛一个异常
+            throw new BeansException(" Unknown scope '" + beanDefinition.getScope() + "' of bean ：" + beanName);
         }
         return bean;
     }
@@ -126,6 +131,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @param beanDefinition
      */
     protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        //非单例bean不注册不执行销毁方法
+        if (!beanDefinition.isSingleton()) {
+            return;
+        }
         String destroyMethodName = beanDefinition.getDestroyMethodName();
         if (bean instanceof DisposableBean || (destroyMethodName != null && !destroyMethodName.isEmpty())) {
             //适配器，为了使不论是否实现了DisposableBean接口的bean都能被注册到disposableBeans中
@@ -165,15 +174,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             /**
              * old version
              */
-            //                try {
-            //                    Field field = bean.getClass().getDeclaredField(name);
-            //                    field.setAccessible(true);
-            //                    field.set(bean, value);
-            //                } catch (NoSuchFieldException e) {
-            //                    throw new BeansException(beanName + " No Such Field：" + name);
-            //                } catch (IllegalAccessException e) {
-            //                    e.printStackTrace();
-            //                }
+            //try {
+            //    Field field = bean.getClass().getDeclaredField(name);
+            //    field.setAccessible(true);
+            //    field.set(bean, value);
+            //} catch (NoSuchFieldException e) {
+            //    throw new BeansException(beanName + " No Such Field：" + name);
+            //} catch (IllegalAccessException e) {
+            //    e.printStackTrace();
+            //}
         }
     }
 

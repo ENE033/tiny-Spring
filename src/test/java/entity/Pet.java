@@ -29,11 +29,11 @@ public class Pet {
         this.age = age;
     }
 
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Pet{" +
+//                "name='" + name + '\'' +
+//                ", age=" + age +
+//                '}';
+//    }
 }
