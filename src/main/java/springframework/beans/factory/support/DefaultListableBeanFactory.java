@@ -32,11 +32,15 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
      * 实例化并获取指定类型的bean
      */
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
+        //map集合，键为String，值为T
         Map<String, T> result = new HashMap<>();
         try {
             beanDefinitionMap.forEach((beanName, beanDefinition) -> {
+                //获取bean的Class
                 Class<?> beanClass = beanDefinition.getBeanClass();
+                //判断beanClass是否继承了type类或实现了type接口
                 if (type.isAssignableFrom(beanClass)) {
+                    //获取bean对象
                     result.put(beanName, (T) getBean(beanName));
                 }
             });

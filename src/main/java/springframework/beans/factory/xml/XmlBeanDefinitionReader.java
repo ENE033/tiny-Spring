@@ -102,15 +102,22 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             //先判断id是否为空，id的优先级比name高
             String beanName = id != null && !id.isEmpty() ? id : name;
 
-            //id和name都为空则使用简单类名，并将首字母小写
-            if (beanName == null || "".equals(beanName)) {
-                beanName = clazz.getSimpleName();
-                char[] chars = beanName.toCharArray();
-                chars[0] = Character.toLowerCase(chars[0]);
-                beanName = new String(chars);
-            }
+            /**
+             * id和name都为空则使用简单类名，并将首字母小写，弃用
+             */
+            //if (beanName == null || "".equals(beanName)) {
+            //    beanName = clazz.getSimpleName();
+            //    char[] chars = beanName.toCharArray();
+            //    chars[0] = Character.toLowerCase(chars[0]);
+            //    beanName = new String(chars);
+            //}
+
 
             //判断beanName是否重复
+            if (beanName == null || beanName.isEmpty()) {
+                throw new BeansException(" The id of class '" + className + "' is null ");
+            }
+
             if (getRegistry().containsBeanDefinition(beanName)) {
                 throw new BeansException(" Duplicate beanName [" + beanName + "] is not allowed ");
             }

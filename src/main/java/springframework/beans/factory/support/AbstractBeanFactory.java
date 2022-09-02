@@ -1,6 +1,7 @@
 package springframework.beans.factory.support;
 
 import springframework.beans.BeansException;
+import springframework.beans.ClassUtil;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.config.BeanPostProcessor;
 import springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -12,6 +13,8 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     //bean后置增强器列表
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
+    private final ClassLoader classLoader = ClassUtil.getDefaultClassLoader();
 
     @Override
     public Object getBean(String beanName) throws BeansException {
@@ -59,11 +62,16 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         this.beanPostProcessors.add(beanPostProcessor);
     }
 
-    protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
-
-    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
-
     public List<BeanPostProcessor> getBeanPostProcessors() {
         return beanPostProcessors;
     }
+
+    public ClassLoader getClassLoader() {
+        return this.classLoader;
+    }
+
+
+    protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
+
+    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
 }

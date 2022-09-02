@@ -1,5 +1,6 @@
 package springframework.beans.factory.support;
 
+import springframework.beans.BeanUtils;
 import springframework.beans.BeansException;
 import springframework.beans.factory.DisposableBean;
 import springframework.beans.factory.config.BeanDefinition;
@@ -52,11 +53,9 @@ public class DisposableBeanAdapter implements DisposableBean {
         }
         //执行xml中的destroy-method，但是不能执行两次destroy方法，需要判断
         if (destroyMethodName != null && !destroyMethodName.isEmpty() && !((bean instanceof DisposableBean) && "destroy".equals(this.destroyMethodName))) {
-            Method destroyMethod;
-            try {
-                destroyMethod = beanDefinition.getBeanClass().getDeclaredMethod(destroyMethodName);
-            } catch (NoSuchMethodException e) {
-                throw new BeansException(" No such method ：" + destroyMethodName, e);
+            Method destroyMethod = BeanUtils.findDeclaredMethod(bean.getClass(), destroyMethodName);
+            if (destroyMethod == null) {
+                throw new BeansException(" No such method ：" + destroyMethodName);
             }
             try {
                 destroyMethod.setAccessible(true);

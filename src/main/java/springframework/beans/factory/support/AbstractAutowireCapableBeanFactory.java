@@ -1,10 +1,10 @@
 package springframework.beans.factory.support;
 
 import cn.hutool.core.bean.BeanUtil;
+import springframework.beans.BeanUtils;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
-import springframework.beans.factory.DisposableBean;
-import springframework.beans.factory.InitializingBean;
+import springframework.beans.factory.*;
 import springframework.beans.factory.config.AutowireCapableBeanFactory;
 import springframework.beans.factory.config.BeanPostProcessor;
 import springframework.beans.factory.config.BeanReference;
@@ -186,18 +186,39 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @return
      */
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
-        Object wrappedBean;
+
+        //调用感知方法
+        invokeAwareMethods(beanName, bean);
+
+        Object wrappedBean = bean;
+        //执行 BeanPostProcessor Before 处理
+        wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
         try {
-            //执行 BeanPostProcessor Before 处理
-            wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
             //激活初始化方法
             invokeInitMethods(beanName, wrappedBean, beanDefinition);
-            //执行 BeanPostProcessor After 处理
-            wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
         } catch (BeansException e) {
             throw new BeansException(" Bean initialization failed ", e);
         }
+        //执行 BeanPostProcessor After 处理
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
         return wrappedBean;
+    }
+
+    private void invokeAwareMethods(String beanName, Object bean) {
+        /**
+         * 通过判断来进行通知实现相应接口的类，并执行感知方法
+         */
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            if (bean instanceof BeanNameAware) {
+                ((BeanNameAware) bean).setBeanName(beanName);
+            }
+            if (bean instanceof BeanClassLoaderAware) {
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(getClassLoader());
+            }
+        }
     }
 
     /**
@@ -217,15 +238,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 throw new BeansException(" AfterPropertiesSet method on bean with name " + beanName + " threw an exception ", e);
             }
         }
-        //配置init-method
+        //获取init-method的方法名
         String initMethodName = beanDefinition.getInitMethodName();
         //避免二次执行销毁操作，afterPropertiesSet中可能实行销毁操作
         if (initMethodName != null && !initMethodName.isEmpty()) {
             Method initMethod;
-            try {
-                initMethod = beanDefinition.getBeanClass().getDeclaredMethod(initMethodName);
-            } catch (NoSuchMethodException e) {
-                throw new BeansException(" No such method ：" + initMethodName, e);
+//          initMethod = beanDefinition.getBeanClass().getDeclaredMethod(initMethodName);
+            initMethod = BeanUtils.findDeclaredMethod(wrappedBean.getClass(), initMethodName);
+            if (initMethod == null) {
+                throw new BeansException(" No such method ：" + initMethodName);
             }
             try {
                 //关闭可入性检查

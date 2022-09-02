@@ -4,16 +4,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean class="common.MyBeanFactoryPostProcessor"/>
+    <bean id="myPostFactoryProcessor" class="common.MyBeanFactoryPostProcessor"/>
 
-    <bean class="common.MyBeanPostProcessor"/>
+    <bean id="myPostProcessor" class="common.MyBeanPostProcessor"/>
 
     <bean id="pet" class="entity.Pet">
         <property name="age" value="2"/>
         <property name="name" value="peter"/>
     </bean>
 
-    <bean id="user" class="entity.User">
+    <bean id="user" class="entity.User" init-method="xxx">
         <property name="age" value="12"/>
         <property name="name" value="ming"/>
         <property name="pet" ref="pet"/>
@@ -21,5 +21,5 @@
 
     <bean id="userDao" class="entity.UserDao" init-method="initMethod" destroy-method="destroy"/>
 
-
+    <bean id="knownAll" class="entity.KnownAll"/>
 </beans>

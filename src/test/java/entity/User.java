@@ -7,15 +7,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Data
-@Component
-public class User {
+public class User implements MethodTest {
     int age;
     String name;
     Pet pet;
-
-    static {
-        System.out.println(" i am user ");
-    }
 
     public User() {
     }

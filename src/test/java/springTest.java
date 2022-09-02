@@ -1,5 +1,6 @@
 import entity.User;
 import entity.UserDao;
+import entity.spring.KnownAll;
 import org.junit.Test;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -16,5 +17,26 @@ public class springTest {
         UserDao userDao = context.getBean("userDao", UserDao.class);
         System.exit(-1);
     }
+
+    @Test
+    public void test1() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+        KnownAll knownAll = context.getBean("knownAll", KnownAll.class);
+        System.out.println(knownAll.getClassLoader());
+        System.out.println(knownAll.getApplicationContext());
+        System.out.println(knownAll.getBeanName());
+        System.out.println(knownAll.getBeanFactory());
+
+        knownAll.setBeanName("sb");
+        System.out.println(knownAll.getBeanName());
+
+    }
+
+    @Test
+    public void test2() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+        context.getBean("user");
+    }
+
 
 }

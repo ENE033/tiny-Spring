@@ -1,6 +1,7 @@
 package springframework.core.io;
 
 import springframework.beans.BeansException;
+import springframework.beans.ClassUtil;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,14 +35,7 @@ public class ClassPathResource implements Resource {
         if (classLoader != null) {
             this.classLoader = classLoader;
         } else {
-            ClassLoader cl = Thread.currentThread().getContextClassLoader();
-            if (cl == null) {
-                //使用该类的类加载器
-                this.classLoader = this.getClass().getClassLoader();
-            } else {
-                //使用线程上下文类加载器
-                this.classLoader = cl;
-            }
+            this.classLoader = ClassUtil.getDefaultClassLoader();
         }
     }
 

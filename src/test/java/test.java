@@ -1,7 +1,9 @@
+import entity.KnownAll;
 import entity.Pet;
 import entity.User;
 import entity.UserDao;
 import org.junit.Test;
+import springframework.beans.BeanUtils;
 import springframework.beans.BeansException;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
@@ -11,12 +13,14 @@ import springframework.beans.factory.support.DefaultListableBeanFactory;
 import springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import springframework.context.ApplicationContext;
 import springframework.context.support.AbstractApplicationContext;
+import springframework.context.support.AbstractRefreshableApplicationContext;
 import springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.core.io.Resource;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -88,7 +92,7 @@ public class test {
     @Test
     public void test5() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
-        User user = context.getBean("user", User.class, "红", 100);
+        User user = context.getBean("user", User.class);
         System.out.println(user);
     }
 
@@ -99,10 +103,30 @@ public class test {
         UserDao userDao = context.getBean("userDao", UserDao.class);
         System.out.println(userDao.getClass());
         System.out.println(((Object) userDao).getClass());
+        System.out.println(BeanUtils.findDeclaredMethod(UserDao.class, "initMethod"));
     }
 
     @Test
     public void test7() {
+
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        System.out.println(context);
+        KnownAll knownAll = context.getBean("knownAll", KnownAll.class);
+        System.out.println(knownAll.getClassLoader());
+        System.out.println(knownAll.getApplicationContext());
+        System.out.println(knownAll.getBeanName());
+        System.out.println(knownAll.getBeanFactory());
+
+//        for (Method declaredMethod : AbstractRefreshableApplicationContext.class.getDeclaredMethods()) {
+//
+//            System.out.println(declaredMethod);
+//        }
+        try {
+            System.out.println(AbstractRefreshableApplicationContext.class.getDeclaredMethod("createBeanFactory"));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
