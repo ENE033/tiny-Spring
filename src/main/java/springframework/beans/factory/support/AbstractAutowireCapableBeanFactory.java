@@ -63,7 +63,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         //如果是个单例bean，注册singletonObjects中
         if (beanDefinition.isSingleton()) {
-            addSingleton(beanName, bean);
+            registerSingleton(beanName, bean);
         } else if (!beanDefinition.isPrototype()) {
             //如果既不是单例又不是原型，暂且抛一个异常
             throw new BeansException(" Unknown scope '" + beanDefinition.getScope() + "' of bean ：" + beanName);

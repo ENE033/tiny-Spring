@@ -1,4 +1,5 @@
 import entity.*;
+import entity.event.CustomEvent;
 import org.junit.Test;
 import springframework.beans.BeanUtils;
 import springframework.beans.BeansException;
@@ -17,8 +18,11 @@ import springframework.core.io.Resource;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class test {
@@ -126,7 +130,7 @@ public class test {
     public void test8() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
-//        System.out.println(beanFactory.getSingletonObjects().entrySet());
+        System.out.println(beanFactory.getSingletonObjects().entrySet());
 //        System.out.println(context.getBean("pet"));
 //        System.out.println(context.getBean("pet"));
 //        User user = context.getBean("user", User.class);
@@ -143,5 +147,12 @@ public class test {
         PetService petService = context.getBean("petService", PetService.class);
         IPetDao iPetDao = petService.getiPetDao();
         System.out.println(iPetDao.queryPetName("12388"));
+    }
+
+    @Test
+    public void test10() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        context.publishEvent(new CustomEvent(context,123465,"aini"));
+        context.registerShutdownHook();
     }
 }

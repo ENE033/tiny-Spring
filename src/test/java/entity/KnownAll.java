@@ -5,6 +5,7 @@ import springframework.beans.factory.BeanClassLoaderAware;
 import springframework.beans.factory.BeanFactory;
 import springframework.beans.factory.BeanFactoryAware;
 import springframework.beans.factory.BeanNameAware;
+import springframework.beans.factory.config.ConfigurableBeanFactory;
 import springframework.context.ApplicationContext;
 import springframework.context.ApplicationContextAware;
 

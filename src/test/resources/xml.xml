@@ -4,30 +4,34 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <!--    <bean id="myPostFactoryProcessor" class="common.MyBeanFactoryPostProcessor"/>-->
+    <!--        <bean id="myPostFactoryProcessor" class="common.MyBeanFactoryPostProcessor"/>-->
 
-    <!--    <bean id="myPostProcessor" class="common.MyBeanPostProcessor"/>-->
+    <!--        <bean id="myPostProcessor" class="common.MyBeanPostProcessor"/>-->
 
-    <!--    <bean id="pet" class="entity.Pet">-->
-    <!--        <property name="age" value="2"/>-->
-    <!--        <property name="name" value="peter"/>-->
+    <!--        <bean id="pet" class="entity.Pet">-->
+    <!--            <property name="age" value="2"/>-->
+    <!--            <property name="name" value="peter"/>-->
+    <!--        </bean>-->
+
+    <!--        <bean id="user" class="entity.User">-->
+    <!--            <property name="age" value="12"/>-->
+    <!--            <property name="name" value="ming"/>-->
+    <!--            <property name="pet" ref="pet"/>-->
+    <!--        </bean>-->
+
+    <!--        <bean id="userDao" class="entity.UserDao" init-method="initMethod" destroy-method="destroy"/>-->
+
+    <!--        <bean id="knownAll" class="entity.KnownAll"/>-->
+
+    <!--    <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>-->
+
+    <!--    <bean id="petService" class="entity.PetService">-->
+    <!--        <property name="iPetDao" ref="iPetDaoProxy"/>-->
     <!--    </bean>-->
 
-    <!--    <bean id="user" class="entity.User">-->
-    <!--        <property name="age" value="12"/>-->
-    <!--        <property name="name" value="ming"/>-->
-    <!--        <property name="pet" ref="pet"/>-->
-    <!--    </bean>-->
-
-    <!--    <bean id="userDao" class="entity.UserDao" init-method="initMethod" destroy-method="destroy"/>-->
-
-    <!--    <bean id="knownAll" class="entity.KnownAll"/>-->
-
-    <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>
-
-    <bean id="petService" class="entity.PetService">
-        <property name="iPetDao" ref="iPetDaoProxy"/>
-    </bean>
+    <bean id="contextClosedEventListener" class="entity.event.ContextClosedEventListener"/>
+    <bean class="entity.event.ContextRefreshedEventListener" id="contextRefreshedEventListener"/>
+    <bean class="entity.event.CustomEventListener" id="customEventListener"/>
 
 
 </beans>

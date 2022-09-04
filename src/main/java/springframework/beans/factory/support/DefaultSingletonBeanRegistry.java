@@ -16,10 +16,6 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     //实现了DisposableBean的bean缓存
     private final Map<String, Object> disposableBeans = new LinkedHashMap<>();
 
-    public void registerDisposableBean(String beanName, DisposableBean bean) {
-        this.disposableBeans.put(beanName, bean);
-    }
-
     /**
      * 获取所有的disposableBean并执行destroy方法
      */
@@ -41,8 +37,13 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
         return singletonObjects.get(beanName);
     }
 
-    protected void addSingleton(String beanName, Object singletonObject) {
+    @Override
+    public void registerSingleton(String beanName, Object singletonObject) {
         singletonObjects.put(beanName, singletonObject);
+    }
+
+    public void registerDisposableBean(String beanName, DisposableBean bean) {
+        this.disposableBeans.put(beanName, bean);
     }
 
     /**

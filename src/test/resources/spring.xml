@@ -3,9 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="user" class="entity.User" init-method="xxx" scope="prototype"/>
-    <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>
-    <bean id="petService" class="entity.PetService">
-        <property name="iPetDao" ref="iPetDaoProxy"/>
-    </bean>
+    <!--    <bean id="user" class="entity.User" init-method="xxx" scope="prototype"/>-->
+    <!--    <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>-->
+    <!--    <bean id="petService" class="entity.PetService">-->
+    <!--        <property name="iPetDao" ref="iPetDaoProxy"/>-->
+    <!--    </bean>-->
+
+    <bean id="contextClosedEventListener" class="entity.spring.event.ContextClosedEventListener"/>
+    <bean class="entity.spring.event.ContextRefreshedEventListener" id="contextRefreshedEventListener"/>
+    <bean class="entity.spring.event.CustomEventListener" id="customEventListener"/>
 </beans>
