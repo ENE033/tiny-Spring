@@ -1,7 +1,7 @@
 package springframework.context.support;
 
 import springframework.beans.BeansException;
-import springframework.beans.factory.ConfigurableListableBeanFactory;
+import springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import springframework.beans.factory.support.DefaultListableBeanFactory;
 
 public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext {

@@ -1,11 +1,10 @@
 package springframework.context.support;
 
 import springframework.beans.BeansException;
-import springframework.beans.factory.ConfigurableListableBeanFactory;
+import springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import springframework.beans.factory.config.BeanFactoryPostProcessor;
 import springframework.beans.factory.config.BeanPostProcessor;
 import springframework.context.ApplicationEvent;
-import springframework.context.ApplicationEventPublisher;
 import springframework.context.ApplicationListener;
 import springframework.context.ConfigurableApplicationContext;
 import springframework.context.event.ApplicationEventMulticaster;

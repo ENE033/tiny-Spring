@@ -4,7 +4,6 @@ import springframework.beans.BeansException;
 import springframework.beans.ClassUtil;
 import springframework.beans.factory.BeanFactory;
 import springframework.beans.factory.BeanFactoryAware;
-import springframework.beans.factory.ConfigurableListableBeanFactory;
 import springframework.beans.factory.config.ConfigurableBeanFactory;
 import springframework.context.ApplicationEvent;
 import springframework.context.ApplicationListener;

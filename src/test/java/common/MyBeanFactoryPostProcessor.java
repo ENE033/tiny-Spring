@@ -1,8 +1,7 @@
 package common;
 
 import springframework.beans.BeansException;
-import springframework.beans.PropertyValue;
-import springframework.beans.factory.ConfigurableListableBeanFactory;
+import springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import springframework.beans.factory.config.BeanFactoryPostProcessor;
 
 public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {

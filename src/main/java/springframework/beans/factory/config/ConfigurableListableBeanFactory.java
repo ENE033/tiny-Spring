@@ -1,6 +1,7 @@
-package springframework.beans.factory;
+package springframework.beans.factory.config;
 
 import springframework.beans.BeansException;
+import springframework.beans.factory.ListableBeanFactory;
 import springframework.beans.factory.config.AutowireCapableBeanFactory;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.config.BeanPostProcessor;
@@ -21,13 +22,6 @@ public interface ConfigurableListableBeanFactory extends ListableBeanFactory, Au
      * @throws BeansException
      */
     BeanDefinition getBeanDefinition(String beanName) throws BeansException;
-
-    /**
-     * 注册bean后置增强器
-     *
-     * @param beanPostProcessor
-     */
-    void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 
     /**
      * 提前实例化单例bean

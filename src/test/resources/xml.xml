@@ -23,11 +23,11 @@
 
     <!--        <bean id="knownAll" class="entity.KnownAll"/>-->
 
-    <!--    <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>-->
+        <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>
 
-    <!--    <bean id="petService" class="entity.PetService">-->
-    <!--        <property name="iPetDao" ref="iPetDaoProxy"/>-->
-    <!--    </bean>-->
+        <bean id="petService" class="entity.PetService">
+            <property name="iPetDao" ref="iPetDaoProxy"/>
+        </bean>
 
     <bean id="contextClosedEventListener" class="entity.event.ContextClosedEventListener"/>
     <bean class="entity.event.ContextRefreshedEventListener" id="contextRefreshedEventListener"/>

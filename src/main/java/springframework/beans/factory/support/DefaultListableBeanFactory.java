@@ -1,9 +1,8 @@
 package springframework.beans.factory.support;
 
 import springframework.beans.BeansException;
-import springframework.beans.factory.ConfigurableListableBeanFactory;
+import springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import springframework.beans.factory.config.BeanDefinition;
-import springframework.beans.factory.config.BeanPostProcessor;
 
 import java.util.HashMap;
 import java.util.Map;
