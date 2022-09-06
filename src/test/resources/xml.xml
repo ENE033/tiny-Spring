@@ -21,7 +21,7 @@
 
     <!--        <bean id="userDao" class="entity.UserDao" init-method="initMethod" destroy-method="destroy"/>-->
 
-    <!--        <bean id="knownAll" class="entity.KnownAll"/>-->
+    <!--        <bean id="knownAll" class="entity.aware.KnownAll"/>-->
 
         <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>
 

@@ -1,4 +1,4 @@
-package entity;
+package entity.aware;
 
 import springframework.beans.BeansException;
 import springframework.beans.factory.BeanClassLoaderAware;

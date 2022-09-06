@@ -1,28 +1,25 @@
 import entity.*;
+import entity.aop.*;
+import entity.aware.KnownAll;
 import entity.event.CustomEvent;
 import org.junit.Test;
+import springframework.aop.AdvisedSupport;
+import springframework.aop.TargetSource;
+import springframework.aop.aspectj.AspectJExpressionPointcut;
+import springframework.aop.framework.JdkDynamicAopProxy;
 import springframework.beans.BeanUtils;
-import springframework.beans.BeansException;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.config.BeanReference;
 import springframework.beans.factory.support.DefaultListableBeanFactory;
 import springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import springframework.context.ApplicationContext;
 import springframework.context.support.AbstractApplicationContext;
 import springframework.context.support.AbstractRefreshableApplicationContext;
 import springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.core.io.Resource;
 
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDate;
 
 
 public class test {
@@ -152,7 +149,56 @@ public class test {
     @Test
     public void test10() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
-        context.publishEvent(new CustomEvent(context,123465,"aini"));
+        context.publishEvent(new CustomEvent(context, 123465, "aini"));
         context.registerShutdownHook();
     }
+
+    @Test
+    public void test11() {
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+        //修饰词，返回值，类名，方法名，参数
+        pointcut.setExpression("execution(* entity.Pet.*(..))");
+        Class<Pet> petClass = Pet.class;
+        System.out.println(pointcut.matches(petClass));
+        try {
+            System.out.println(pointcut.matches(petClass.getDeclaredMethod("getName"), petClass));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test12() {
+        //定义切点
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+        //指定哪些连接点为切点
+        //修饰词，返回值，类名，方法名，参数
+        pointcut.setExpression("execution(* entity.aop.*.*(..))");
+        IUserService userService = new UserService2();
+        //配置被代理对象，方法拦截器和方法匹配器（匹配切点）
+        AdvisedSupport advisedSupport = new AdvisedSupport();
+        advisedSupport.setTargetSource(new TargetSource(userService));
+        PeerInterceptor peerInterceptor = new PeerInterceptor();
+        advisedSupport.setMethodInterceptor(peerInterceptor);
+        advisedSupport.setMethodMatcher(pointcut);
+        //通过原生jdk的方式获取获取代理对象
+        IUserService proxy = (IUserService) new JdkDynamicAopProxy(advisedSupport).getProxy();
+//        proxy.queryUserInfo();
+//        proxy.register("woaiguozhi");
+//        proxy.addInfo();
+
+        IBlogService blogService = new BlogService();
+        AdvisedSupport advisedSupport1 = new AdvisedSupport();
+        advisedSupport1.setTargetSource(new TargetSource(blogService));
+        advisedSupport1.setMethodInterceptor(peerInterceptor);
+        advisedSupport1.setMethodMatcher(pointcut);
+        IBlogService proxy1 = (IBlogService) new JdkDynamicAopProxy(advisedSupport1).getProxy();
+        Blog blog = proxy1.getBlog();
+        Blog blog1 = new Blog(123L, "今天天气真好", LocalDate.now());
+        proxy1.getBlogContext(blog1);
+        proxy1.getBlogDate(blog1);
+        proxy1.getBlogID(blog1);
+    }
+
+
 }
