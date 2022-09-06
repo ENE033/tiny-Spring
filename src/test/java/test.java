@@ -6,6 +6,7 @@ import org.junit.Test;
 import springframework.aop.AdvisedSupport;
 import springframework.aop.TargetSource;
 import springframework.aop.aspectj.AspectJExpressionPointcut;
+import springframework.aop.framework.Cglib2AopProxy;
 import springframework.aop.framework.JdkDynamicAopProxy;
 import springframework.beans.BeanUtils;
 import springframework.beans.PropertyValue;
@@ -198,6 +199,23 @@ public class test {
         proxy1.getBlogContext(blog1);
         proxy1.getBlogDate(blog1);
         proxy1.getBlogID(blog1);
+    }
+
+    @Test
+    public void test13() {
+        AdvisedSupport advisedSupport = new AdvisedSupport();
+        AspectJExpressionPointcut expressionPointcut = new AspectJExpressionPointcut("execution(* entity.aop.*.*(..))");
+        IBlogService blogService = new BlogService();
+        advisedSupport.setTargetSource(new TargetSource(blogService));
+        advisedSupport.setMethodInterceptor(new PeerInterceptor());
+        advisedSupport.setMethodMatcher(expressionPointcut);
+        IBlogService proxy = (IBlogService) new Cglib2AopProxy(advisedSupport).getProxy();
+        Blog blog1 = new Blog(123L, "今天天气真好", LocalDate.now());
+        proxy.getBlogContext(blog1);
+        proxy.getBlogDate(blog1);
+        proxy.getBlogID(blog1);
+
+
     }
 
 
