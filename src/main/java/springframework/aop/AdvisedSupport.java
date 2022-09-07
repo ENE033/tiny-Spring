@@ -6,6 +6,8 @@ import org.aopalliance.intercept.MethodInterceptor;
  * AOP 代理配置管理器
  */
 public class AdvisedSupport {
+    //是否直接代理目标类(true)，还是代理指定的接口(false)
+    private boolean ProxyTargetClass = false;
     //被代理的对象
     private TargetSource targetSource;
     //方法拦截器
@@ -35,5 +37,13 @@ public class AdvisedSupport {
 
     public void setMethodMatcher(MethodMatcher methodMatcher) {
         this.methodMatcher = methodMatcher;
+    }
+
+    public boolean isProxyTargetClass() {
+        return ProxyTargetClass;
+    }
+
+    public void setProxyTargetClass(boolean proxyTargetClass) {
+        ProxyTargetClass = proxyTargetClass;
     }
 }

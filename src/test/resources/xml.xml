@@ -23,15 +23,25 @@
 
     <!--        <bean id="knownAll" class="entity.aware.KnownAll"/>-->
 
-        <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>
+    <!--        <bean id="iPetDaoProxy" class="entity.IPetDaoProxy"/>-->
 
-        <bean id="petService" class="entity.PetService">
-            <property name="iPetDao" ref="iPetDaoProxy"/>
-        </bean>
+    <!--        <bean id="petService" class="entity.PetService">-->
+    <!--            <property name="iPetDao" ref="iPetDaoProxy"/>-->
+    <!--        </bean>-->
 
-    <bean id="contextClosedEventListener" class="entity.event.ContextClosedEventListener"/>
-    <bean class="entity.event.ContextRefreshedEventListener" id="contextRefreshedEventListener"/>
-    <bean class="entity.event.CustomEventListener" id="customEventListener"/>
+    <!--    <bean id="contextClosedEventListener" class="entity.event.ContextClosedEventListener"/>-->
+    <!--    <bean class="entity.event.ContextRefreshedEventListener" id="contextRefreshedEventListener"/>-->
+    <!--    <bean class="entity.event.CustomEventListener" id="customEventListener"/>-->
 
+    <bean id="userService" class="entity.aop.UserService"/>
+    <bean id="autoProxyCreator" class="springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <bean id="beforeAdvice" class="entity.aop.UserServiceBeforeAdvice"/>
+    <bean id="beforeAdviceInterceptor" class="springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="beforeAdvice"/>
+    </bean>
+    <bean id="advisor" class="springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* entity.aop.*.*(..))"/>
+        <property name="advice" ref="beforeAdviceInterceptor"/>
+    </bean>
 
 </beans>

@@ -214,9 +214,14 @@ public class test {
         proxy.getBlogContext(blog1);
         proxy.getBlogDate(blog1);
         proxy.getBlogID(blog1);
-
-
     }
 
+    @Test
+    public void test14() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        IUserService userService = context.getBean("userService", IUserService.class);
+        System.out.println(userService);
+        System.out.println(userService.queryUserInfo());
+    }
 
 }

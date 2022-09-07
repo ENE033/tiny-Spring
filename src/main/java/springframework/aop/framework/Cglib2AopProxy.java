@@ -8,6 +8,9 @@ import springframework.aop.ReflectiveMethodInvocation;
 
 import java.lang.reflect.Method;
 
+/**
+ * Cglib动态代理
+ */
 public class Cglib2AopProxy implements AopProxy {
 
     private final AdvisedSupport advisedSupport;
@@ -26,6 +29,9 @@ public class Cglib2AopProxy implements AopProxy {
     }
 
 
+    /**
+     * Cglib方法拦截器
+     */
     private static class DynamicAdvisedInterceptor implements MethodInterceptor {
 
         private final AdvisedSupport advisedSupport;
@@ -44,6 +50,9 @@ public class Cglib2AopProxy implements AopProxy {
         }
     }
 
+    /**
+     * Cglib切点
+     */
     private static class CglibMethodInvocation extends ReflectiveMethodInvocation {
 
         MethodProxy methodProxy;

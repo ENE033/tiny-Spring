@@ -2,7 +2,7 @@ package springframework.aop;
 
 
 /**
- * 切点，用于获取MethodMatcher和ClassFilter两个类
+ * 切点，组合MethodMatcher和ClassFilter两个类
  */
 public interface PointCut {
     ClassFilter getClassFilter();

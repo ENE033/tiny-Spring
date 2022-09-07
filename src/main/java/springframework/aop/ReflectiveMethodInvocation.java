@@ -6,7 +6,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
 /**
- * 可被方法拦截器拦截的连接点，可以使用反射执行目标对象方法
+ * 可被方法拦截器拦截的连接点，可以使用反射执行目标对象原方法
  */
 public class ReflectiveMethodInvocation implements MethodInvocation {
 
