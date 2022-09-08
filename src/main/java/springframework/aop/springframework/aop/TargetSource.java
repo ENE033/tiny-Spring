@@ -1,4 +1,4 @@
-package springframework.aop;
+package springframework.aop.springframework.aop;
 
 /**
  * 被代理对象信息管理，用于获取被代理对象和被代理对象的类

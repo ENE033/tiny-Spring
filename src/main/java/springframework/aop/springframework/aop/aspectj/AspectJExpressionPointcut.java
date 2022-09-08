@@ -1,4 +1,4 @@
-package springframework.aop.aspectj;
+package springframework.aop.springframework.aop.aspectj;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -7,12 +7,12 @@ import java.util.Set;
 import org.aspectj.weaver.tools.PointcutExpression;
 import org.aspectj.weaver.tools.PointcutParser;
 import org.aspectj.weaver.tools.PointcutPrimitive;
-import springframework.aop.ClassFilter;
-import springframework.aop.MethodMatcher;
-import springframework.aop.PointCut;
+import springframework.aop.springframework.aop.ClassFilter;
+import springframework.aop.springframework.aop.MethodMatcher;
+import springframework.aop.springframework.aop.Pointcut;
 import springframework.beans.ClassUtil;
 
-public class AspectJExpressionPointcut implements PointCut, ClassFilter, MethodMatcher {
+public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodMatcher {
 
     //支持的原语集合
     private final static Set<PointcutPrimitive> SUPPORTED_PRIMITIVES = new HashSet<>();
@@ -46,9 +46,8 @@ public class AspectJExpressionPointcut implements PointCut, ClassFilter, MethodM
 
     //获取切点解析器
     private PointcutParser initializePointcutParser() {
-        PointcutParser parser = PointcutParser.getPointcutParserSupportingSpecifiedPrimitivesAndUsingSpecifiedClassLoaderForResolution(
+        return PointcutParser.getPointcutParserSupportingSpecifiedPrimitivesAndUsingSpecifiedClassLoaderForResolution(
                 SUPPORTED_PRIMITIVES, classLoader);
-        return parser;
     }
 
     //确定此切入点是否可以匹配给定类中的连接点

@@ -47,11 +47,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Object bean;
         try {
             bean = resolveBeforeInstantiation(beanName, beanDefinition);
-            if (bean != null) {
-                return bean;
+            if (bean == null) {
+                //创建bean
+                bean = doCreateBean(beanName, beanDefinition, args);
             }
-            //创建bean
-            bean = doCreateBean(beanName, beanDefinition, args);
             //给bean赋值
             applyPropertyValues(beanName, bean, beanDefinition);
             //初始化bean

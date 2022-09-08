@@ -1,10 +1,10 @@
-package springframework.aop.framework;
+package springframework.aop.springframework.aop.framework;
 
-import springframework.aop.AdvisedSupport;
+import springframework.aop.springframework.aop.AdvisedSupport;
 
 public class ProxyFactory {
 
-    private AdvisedSupport advisedSupport;
+    private final AdvisedSupport advisedSupport;
 
     public ProxyFactory(AdvisedSupport advisedSupport) {
         this.advisedSupport = advisedSupport;

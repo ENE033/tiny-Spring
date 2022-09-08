@@ -1,9 +1,8 @@
-package springframework.aop.aspectj;
+package springframework.aop.springframework.aop.aspectj;
 
-import org.aopalliance.aop.Advice;
-import springframework.aop.PointCut;
-import springframework.aop.PointcutAdvisor;
-import springframework.aop.aspectj.AspectJExpressionPointcut;
+import springframework.aop.aopalliance.aop.Advice;
+import springframework.aop.springframework.aop.Pointcut;
+import springframework.aop.springframework.aop.PointcutAdvisor;
 
 public class AspectJExpressionPointcutAdvisor implements PointcutAdvisor {
 
@@ -23,7 +22,7 @@ public class AspectJExpressionPointcutAdvisor implements PointcutAdvisor {
     }
 
     @Override
-    public PointCut getPointcut() {
+    public Pointcut getPointcut() {
         if (null == pointcut) {
             return new AspectJExpressionPointcut(expression);
         }

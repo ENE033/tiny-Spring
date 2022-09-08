@@ -34,12 +34,14 @@
     <!--    <bean class="entity.event.CustomEventListener" id="customEventListener"/>-->
 
     <bean id="userService" class="entity.aop.UserService"/>
-    <bean id="autoProxyCreator" class="springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <bean id="autoProxyCreator"
+          class="springframework.aop.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
     <bean id="beforeAdvice" class="entity.aop.UserServiceBeforeAdvice"/>
-    <bean id="beforeAdviceInterceptor" class="springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+    <bean id="beforeAdviceInterceptor"
+          class="springframework.aop.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
         <property name="advice" ref="beforeAdvice"/>
     </bean>
-    <bean id="advisor" class="springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+    <bean id="advisor" class="springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
         <property name="expression" value="execution(* entity.aop.*.*(..))"/>
         <property name="advice" ref="beforeAdviceInterceptor"/>
     </bean>

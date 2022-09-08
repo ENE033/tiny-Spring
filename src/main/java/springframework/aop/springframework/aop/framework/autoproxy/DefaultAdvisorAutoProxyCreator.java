@@ -1,19 +1,16 @@
-package springframework.aop.framework.autoproxy;
+package springframework.aop.springframework.aop.framework.autoproxy;
 
-import org.aopalliance.aop.Advice;
-import org.aopalliance.intercept.MethodInterceptor;
-import springframework.aop.*;
-import springframework.aop.aspectj.AspectJExpressionPointcut;
-import springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
-import springframework.aop.framework.ProxyFactory;
+import springframework.aop.aopalliance.aop.Advice;
+import springframework.aop.aopalliance.intercept.MethodInterceptor;
+import springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import springframework.aop.springframework.aop.framework.ProxyFactory;
+import springframework.aop.springframework.aop.*;
 import springframework.beans.BeansException;
 import springframework.beans.factory.BeanFactory;
 import springframework.beans.factory.BeanFactoryAware;
-import springframework.beans.factory.config.ConfigurableBeanFactory;
 import springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import springframework.beans.factory.support.DefaultListableBeanFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 public class DefaultAdvisorAutoProxyCreator implements BeanFactoryAware, InstantiationAwareBeanPostProcessor {
@@ -36,7 +33,7 @@ public class DefaultAdvisorAutoProxyCreator implements BeanFactoryAware, Instant
     }
 
     private boolean isInfrastructureClass(Class<?> beanClass) {
-        return Advice.class.isAssignableFrom(beanClass) || PointCut.class.isAssignableFrom(beanClass) || Advisor.class.isAssignableFrom(beanClass);
+        return Advice.class.isAssignableFrom(beanClass) || Pointcut.class.isAssignableFrom(beanClass) || Advisor.class.isAssignableFrom(beanClass);
     }
 
     @Override

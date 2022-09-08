@@ -1,7 +1,8 @@
 package entity.aop;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
+
+import springframework.aop.aopalliance.intercept.MethodInterceptor;
+import springframework.aop.aopalliance.intercept.MethodInvocation;
 
 /**
  * 实现方法拦截器

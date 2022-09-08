@@ -1,6 +1,6 @@
-package springframework.aop;
+package springframework.aop.springframework.aop;
 
-import org.aopalliance.intercept.MethodInterceptor;
+import springframework.aop.aopalliance.intercept.MethodInterceptor;
 
 /**
  * AOP 代理配置管理器

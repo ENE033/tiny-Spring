@@ -1,10 +1,9 @@
-package springframework.aop.framework;
+package springframework.aop.springframework.aop.framework;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import springframework.aop.AdvisedSupport;
-import springframework.aop.ReflectiveMethodInvocation;
+import springframework.aop.springframework.aop.AdvisedSupport;
 
 import java.lang.reflect.Method;
 

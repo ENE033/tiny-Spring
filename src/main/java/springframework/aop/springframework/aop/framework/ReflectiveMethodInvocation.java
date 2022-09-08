@@ -1,6 +1,6 @@
-package springframework.aop;
+package springframework.aop.springframework.aop.framework;
 
-import org.aopalliance.intercept.MethodInvocation;
+import springframework.aop.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;

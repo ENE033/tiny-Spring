@@ -1,6 +1,6 @@
 package entity.aop;
 
-import springframework.aop.MethodBeforeAdvice;
+import springframework.aop.springframework.aop.MethodBeforeAdvice;
 
 import java.lang.reflect.Method;
 
