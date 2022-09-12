@@ -90,4 +90,6 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
+
+
 }

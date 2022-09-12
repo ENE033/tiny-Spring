@@ -39,6 +39,11 @@ public class ClassPathResource implements Resource {
         }
     }
 
+    @Override
+    public String getResourceLocation() {
+        return path;
+    }
+
     /**
      * 使用类加载器获取path文件的输入流
      *

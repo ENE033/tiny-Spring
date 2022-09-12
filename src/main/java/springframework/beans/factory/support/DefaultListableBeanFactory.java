@@ -1,8 +1,11 @@
 package springframework.beans.factory.support;
 
 import springframework.beans.BeansException;
+import springframework.beans.PropertyValue;
+import springframework.beans.PropertyValues;
 import springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import springframework.beans.factory.config.BeanDefinition;
+import springframework.context.annotation.ScannedGenericBeanDefinition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +33,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     /**
      * 实例化并获取指定类型的bean
      */
-    public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
+    public <T> Map<String, T> getBeansOfType(Class<T> type) {
         //map集合，键为String，值为T
         Map<String, T> result = new HashMap<>();
         try {
@@ -71,4 +74,50 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
             }
         }
     }
+
+    @Override
+    public boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws BeansException {
+        if (!containsBeanDefinition(beanName)) {
+            return true;
+        }
+        BeanDefinition existingDef = getBeanDefinition(beanName);
+        if (isCompatible(beanDefinition, existingDef)) {
+            return false;
+        } else {
+            throw new BeansException(" Duplicate beanName '" + beanName + "' is not allowed ");
+        }
+    }
+
+    @Override
+    public boolean isCompatible(BeanDefinition newDefinition, BeanDefinition existingDefinition) {
+        if (newDefinition.getBeanClass() == existingDefinition.getBeanClass()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 将已存在的beanDefinition合并到新的beanDefinition中
+     *
+     * @param newDefinition
+     * @param existingDefinition
+     */
+    public void mergeBeanDefinition(BeanDefinition newDefinition, BeanDefinition existingDefinition) {
+        if (newDefinition.getResource() == null) {
+            newDefinition.setResource(existingDefinition.getResource());
+        }
+        if (newDefinition.getInitMethodName() == null) {
+            newDefinition.setInitMethodName(existingDefinition.getInitMethodName());
+        }
+        if (newDefinition.getDestroyMethodName() == null) {
+            newDefinition.setDestroyMethodName(existingDefinition.getDestroyMethodName());
+        }
+        PropertyValues newPropertyValues = newDefinition.getPropertyValues();
+        for (PropertyValue propertyValue : existingDefinition.getPropertyValues().getPropertyValues()) {
+            if (newPropertyValues.getPropertyValue(propertyValue.getName()) == null) {
+                newPropertyValues.addPropertyValue(propertyValue);
+            }
+        }
+    }
+
 }

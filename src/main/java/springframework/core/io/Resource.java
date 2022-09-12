@@ -5,6 +5,8 @@ import java.io.InputStream;
 
 public interface Resource {
 
+    String getResourceLocation();
+
     /**
      * 获取输入流
      *

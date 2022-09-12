@@ -1,3 +1,4 @@
+import cn.hutool.core.bean.BeanUtil;
 import entity.*;
 import entity.aop.*;
 import entity.aware.KnownAll;
@@ -9,6 +10,7 @@ import springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcut
 import springframework.aop.springframework.aop.framework.Cglib2AopProxy;
 import springframework.aop.springframework.aop.framework.JdkDynamicAopProxy;
 import springframework.beans.BeanUtils;
+import springframework.beans.ClassUtil;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
 import springframework.beans.factory.config.BeanDefinition;
@@ -20,7 +22,15 @@ import springframework.context.support.AbstractRefreshableApplicationContext;
 import springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.core.io.Resource;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
+import java.util.Enumeration;
+import java.util.Set;
 
 
 public class test {
@@ -223,5 +233,26 @@ public class test {
         System.out.println(userService);
         System.out.println(userService.queryUserInfo());
     }
+
+    @Test
+    public void test15() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        User user = context.getBean("user", User.class);
+        Pet pet = context.getBean("pet", Pet.class);
+        Pet pet1 = context.getBean("pet1", Pet.class);
+        System.out.println(pet1);
+        System.out.println(user.getAge());
+        System.out.println(user.getName());
+        System.out.println(pet);
+        System.out.println(user.getPet());
+
+    }
+
+    @Test
+    public void test16() {
+
+
+    }
+
 
 }

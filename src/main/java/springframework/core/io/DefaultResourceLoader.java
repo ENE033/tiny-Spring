@@ -1,5 +1,6 @@
 package springframework.core.io;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -21,7 +22,11 @@ public class DefaultResourceLoader implements ResourceLoader {
                 URL url = new URL(location);
                 return new UrlResource(url);
             } catch (MalformedURLException e) {
-                return new FileSystemResource(location);
+                if (new File(location).exists()) {
+                    return new FileSystemResource(location);
+                } else {
+                    return new ClassPathResource(location);
+                }
             }
         }
 

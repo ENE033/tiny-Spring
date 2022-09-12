@@ -11,6 +11,8 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 
     private final ResourceLoader resourceLoader;
 
+    private Resource currentResource;
+
 
     public AbstractBeanDefinitionReader(BeanDefinitionRegistry registry, ResourceLoader resourceLoader) {
         this.registry = registry;
@@ -29,6 +31,15 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
     @Override
     public ResourceLoader getResourceLoader() {
         return resourceLoader;
+    }
+
+
+    public Resource getCurrentResource() {
+        return currentResource;
+    }
+
+    public void setCurrentResource(Resource resource) {
+        this.currentResource = resource;
     }
 
     /**
@@ -73,7 +84,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
     @Override
     public int loadBeanDefinitions(String location) throws BeansException {
         ResourceLoader resourceLoader = getResourceLoader();
-        Resource resource = resourceLoader.getResource(location);
-        return loadBeanDefinitions(resource);
+        currentResource = resourceLoader.getResource(location);
+        return loadBeanDefinitions(currentResource);
     }
 }

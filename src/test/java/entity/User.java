@@ -2,14 +2,23 @@ package entity;
 
 import lombok.Data;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import springframework.beans.factory.annotation.Autowired;
+import springframework.beans.factory.annotation.Qualifier;
+import springframework.beans.factory.annotation.Value;
+import springframework.context.annotation.Scope;
+import springframework.stereotype.Component;
 
 import java.util.List;
 
 //@Data
+@Component
 public class User implements MethodTest {
     int age;
+    @Value("woaini")
+    @Autowired(required = false)
     String name;
+    @Autowired
+    @Qualifier("pet1")
     Pet pet;
 
 
@@ -39,5 +48,29 @@ public class User implements MethodTest {
 
     public void read() {
         System.out.println("hello");
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 }

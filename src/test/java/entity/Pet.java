@@ -1,5 +1,9 @@
 package entity;
 
+import springframework.beans.factory.annotation.Autowired;
+import springframework.stereotype.Component;
+
+@Component
 public class Pet {
 
     String name;

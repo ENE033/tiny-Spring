@@ -13,12 +13,12 @@ public interface ListableBeanFactory extends BeanFactory {
     /**
      * 根据bean类型返回bean实例
      *
-     * @param type
      * @param <T>
+     * @param type
      * @return
      * @throws BeansException
      */
-    <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException;
+    <T> Map<String, T> getBeansOfType(Class<T> type);
 
     /**
      * 返回注册表中所有的bean名称

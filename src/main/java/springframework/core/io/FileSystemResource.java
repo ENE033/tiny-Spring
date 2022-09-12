@@ -5,9 +5,9 @@ import springframework.beans.BeansException;
 import java.io.*;
 
 public class FileSystemResource implements Resource {
-    String path;
+    private String path;
 
-    File file;
+    private File file;
 
     public FileSystemResource(String path) {
         this.path = path;
@@ -18,12 +18,16 @@ public class FileSystemResource implements Resource {
     }
 
     @Override
+    public String getResourceLocation() {
+        return file == null ? path : file.getAbsolutePath();
+    }
+
+    @Override
     public InputStream getInputStream() {
         if (file == null) {
             file = new File(path);
         }
-        InputStream fileInputStream = null;
-
+        InputStream fileInputStream;
         try {
             fileInputStream = new FileInputStream(file);
         } catch (FileNotFoundException e) {

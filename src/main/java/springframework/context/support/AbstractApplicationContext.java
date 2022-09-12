@@ -53,11 +53,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
             finishRefresh();
 
         } catch (Exception e) {
-
-            //执行bean的销毁方法
-            close();
-
+            try {
+                //执行bean的销毁方法
+                close();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             throw new BeansException(" Exception encountered during context initialization ", e);
+
         }
     }
 
@@ -119,6 +122,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     @Override
     public void publishEvent(ApplicationEvent event) {
+        if (applicationEventMulticaster == null) {
+            throw new BeansException(" applicationEventMulticaster is null ");
+        }
         //事件多播器广播事件到相应的监听器中
         applicationEventMulticaster.multicastEvent(event);
     }
@@ -137,13 +143,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     /**
      * 获取指定类的bean，可用于获取beanFactoryPostProcessor和beanPostProcessor
      *
-     * @param type
      * @param <T>
+     * @param type
      * @return
      * @throws BeansException
      */
     @Override
-    public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
+    public <T> Map<String, T> getBeansOfType(Class<T> type) {
         return getBeanFactory().getBeansOfType(type);
     }
 

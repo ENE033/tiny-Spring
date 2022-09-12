@@ -16,6 +16,11 @@ public class UrlResource implements Resource {
     }
 
     @Override
+    public String getResourceLocation() {
+        return Url.toString();
+    }
+
+    @Override
     public InputStream getInputStream() {
         URLConnection urlConnection = null;
         InputStream inputStream;

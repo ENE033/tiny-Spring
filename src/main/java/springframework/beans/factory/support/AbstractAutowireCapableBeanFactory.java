@@ -51,8 +51,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 //创建bean
                 bean = doCreateBean(beanName, beanDefinition, args);
             }
-            //给bean赋值
-            applyPropertyValues(beanName, bean, beanDefinition);
+            //填充bean
+//            applyPropertyValues(beanName, bean, beanDefinition);
+            populateBean(beanName, bean, beanDefinition);
             //初始化bean
             bean = initializeBean(beanName, bean, beanDefinition);
             //注册实现了DisposableBean或destroy-method不为空的bean, 等销毁时再执行销毁方法
@@ -69,6 +70,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         return bean;
     }
+
+    protected void populateBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (InstantiationAwareBeanPostProcessor.class.isAssignableFrom(beanPostProcessor.getClass())) {
+                ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessProperties(beanDefinition.getPropertyValues(), bean, beanName);
+            }
+        }
+        applyPropertyValues(beanName, bean, beanDefinition);
+    }
+
 
     protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
         Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
@@ -180,13 +191,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             if (value instanceof BeanReference) {
                 BeanReference beanReference = (BeanReference) value;
                 value = getBean(beanReference.getBeanName());
+            } else if (value instanceof TypedStringValue) {
+                TypedStringValue typedStringValue = (TypedStringValue) value;
+                value = typedStringValue.getValue();
             }
             try {
                 //用BeanUtil进行属性注入
                 BeanUtil.setFieldValue(bean, name, value);
 //                Field field = beanDefinition.getBeanClass().getDeclaredField(name);
 //                field.setAccessible(true);
-//                field.set(bean, value);
+//                field.set(bean, Value);
             } catch (Exception e) {
                 throw new BeansException(" Property injection failed ", e);
             }
@@ -197,7 +211,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             //try {
             //    Field field = bean.getClass().getDeclaredField(name);
             //    field.setAccessible(true);
-            //    field.set(bean, value);
+            //    field.set(bean, Value);
             //} catch (NoSuchFieldException e) {
             //    throw new BeansException(beanName + " No Such Field：" + name);
             //} catch (IllegalAccessException e) {
