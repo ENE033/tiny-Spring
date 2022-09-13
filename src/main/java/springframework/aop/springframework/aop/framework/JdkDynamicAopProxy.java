@@ -2,7 +2,7 @@ package springframework.aop.springframework.aop.framework;
 
 import springframework.aop.springframework.aop.AdvisedSupport;
 import springframework.aop.aopalliance.intercept.MethodInterceptor;
-import springframework.beans.ClassUtil;
+import springframework.util.ClassUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -37,7 +37,7 @@ public class JdkDynamicAopProxy implements AopProxy, InvocationHandler {
     @Override
     public Object getProxy() {
         return Proxy.newProxyInstance(
-                ClassUtil.getDefaultClassLoader(),
+                ClassUtils.getDefaultClassLoader(),
                 advised.getTargetSource().getTargetClass().getInterfaces(),
                 this);
     }

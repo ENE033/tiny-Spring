@@ -1,6 +1,6 @@
-package springframework.beans;
+package springframework.util;
 
-public class ClassUtil {
+public class ClassUtils {
 
     public static final String CGLIB_CLASS_SEPARATOR = "$$EnhancerByCGLIB$$";
 
@@ -12,7 +12,7 @@ public class ClassUtil {
 
         }
         if (cl == null) {
-            cl = ClassUtil.class.getClassLoader();
+            cl = ClassUtils.class.getClassLoader();
         }
         return cl;
     }

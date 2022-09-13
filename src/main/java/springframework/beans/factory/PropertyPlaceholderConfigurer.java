@@ -9,6 +9,7 @@ import springframework.beans.factory.config.TypedStringValue;
 import springframework.core.io.DefaultResourceLoader;
 import springframework.core.io.Resource;
 import springframework.core.io.ResourceLoader;
+import springframework.util.StringValueResolver;
 
 import java.util.Properties;
 
@@ -49,18 +50,49 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
                 }
                 //强转
                 TypedStringValue typedStringValue = (TypedStringValue) value;
-                //构造stringBuilder并解析判断
-                StringBuilder strVal = new StringBuilder(typedStringValue.getValue());
-                int start = strVal.indexOf(DEFAULT_PLACEHOLDER_PREFIX);
-                int end = strVal.lastIndexOf(DEFAULT_PLACEHOLDER_SUFFIX);
-                //${需要在第一位，}需要在最后一位，start要小于end
-                if (start == 0 && end == strVal.length() - 1 && start < end) {
-                    //获取占位符中的内容
-                    String val = strVal.substring(start + 2, end);
-                    //在properties中获取占位符的值，如果键为空，那么值为原来的值
-                    typedStringValue.setValue(properties.getProperty(val, typedStringValue.getValue()));
-                }
+                typedStringValue.setValue(resolvePlaceholder(typedStringValue.getValue(), properties));
             }
         }
+        //将字符解析器加入到容器中，提供@Value注解使用
+        PlaceholderResolvingStringValueResolver valueResolver = new PlaceholderResolvingStringValueResolver(properties);
+        beanFactory.addEmbeddedValueResolver(valueResolver);
     }
+
+    /**
+     * 解析value在properties中的值
+     *
+     * @param value
+     * @param properties
+     * @return
+     */
+    public String resolvePlaceholder(String value, Properties properties) {
+        //构造stringBuilder并解析判断
+        StringBuilder strVal = new StringBuilder(value);
+        int start = strVal.indexOf(DEFAULT_PLACEHOLDER_PREFIX);
+        int end = strVal.lastIndexOf(DEFAULT_PLACEHOLDER_SUFFIX);
+        //${需要在第一位，}需要在最后一位，start要小于end
+        if (start == 0 && end == strVal.length() - 1 && start < end) {
+            //获取占位符中的内容
+            String val = strVal.substring(start + 2, end);
+            //在properties中获取占位符的值，如果键为空，那么值为原来的值
+            return properties.getProperty(val, value);
+        }
+        //无法解析则直接返回原本的值
+        return value;
+    }
+
+    private class PlaceholderResolvingStringValueResolver implements StringValueResolver {
+
+        private final Properties properties;
+
+        public PlaceholderResolvingStringValueResolver(Properties properties) {
+            this.properties = properties;
+        }
+
+        @Override
+        public String resolveStringValue(String strVal) {
+            return PropertyPlaceholderConfigurer.this.resolvePlaceholder(strVal, properties);
+        }
+    }
+
 }

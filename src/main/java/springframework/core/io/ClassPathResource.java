@@ -1,10 +1,8 @@
 package springframework.core.io;
 
 import springframework.beans.BeansException;
-import springframework.beans.ClassUtil;
+import springframework.util.ClassUtils;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 
 public class ClassPathResource implements Resource {
@@ -35,7 +33,7 @@ public class ClassPathResource implements Resource {
         if (classLoader != null) {
             this.classLoader = classLoader;
         } else {
-            this.classLoader = ClassUtil.getDefaultClassLoader();
+            this.classLoader = ClassUtils.getDefaultClassLoader();
         }
     }
 

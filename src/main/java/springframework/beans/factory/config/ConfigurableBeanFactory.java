@@ -1,6 +1,7 @@
 package springframework.beans.factory.config;
 
 import springframework.beans.factory.HierarchicalBeanFactory;
+import springframework.util.StringValueResolver;
 
 /**
  * 可获取 BeanPostProcessor、BeanClassLoader等的一个配置化接口
@@ -29,5 +30,9 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
      * 执行disposableBeans中的bean的销毁方法
      */
     void destroySingletons();
+
+    void addEmbeddedValueResolver(StringValueResolver valueResolver);
+
+    String resolveEmbeddedValue(String value);
 
 }

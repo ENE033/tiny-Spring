@@ -1,7 +1,7 @@
 package springframework.context.event;
 
 import springframework.beans.BeansException;
-import springframework.beans.ClassUtil;
+import springframework.util.ClassUtils;
 import springframework.beans.factory.BeanFactory;
 import springframework.beans.factory.BeanFactoryAware;
 import springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -54,7 +54,7 @@ public abstract class AbstractApplicationEventMulticaster implements Application
         //获取监听器的类对象
         Class<? extends ApplicationListener> listenerClass = applicationListener.getClass();
         //判断该类是否cglib代理对象，获取目标类对象
-        Class<?> targetClass = ClassUtil.isCglibProxyClass(listenerClass) ? listenerClass.getSuperclass() : listenerClass;
+        Class<?> targetClass = ClassUtils.isCglibProxyClass(listenerClass) ? listenerClass.getSuperclass() : listenerClass;
         //获取目标类对象的实现的接口
         Type genericInterface = targetClass.getGenericInterfaces()[0];
         //获取泛型参数的类型
@@ -64,7 +64,7 @@ public abstract class AbstractApplicationEventMulticaster implements Application
         Class<?> eventClass;
         try {
             //通过类加载器获取泛型参数的类对象
-            eventClass = ClassUtil.getDefaultClassLoader().loadClass(className);
+            eventClass = ClassUtils.getDefaultClassLoader().loadClass(className);
         } catch (ClassNotFoundException e) {
             throw new BeansException(" wrong event class name ：" + className, e);
         }

@@ -15,9 +15,9 @@
     <!--    </bean>-->
 
     <bean id="user" class="entity.User">
-        <property name="age" value="${age}"/>
+        <!--        <property name="age" value="${age}"/>-->
         <!--        <property name="name" value="${name}"/>-->
-        <!--        <property name="pet" ref="pet"/>-->
+        <property name="pet" ref="pet"/>
     </bean>
 
     <bean id="pet1" class="entity.Pet">

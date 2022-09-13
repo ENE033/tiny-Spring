@@ -88,11 +88,12 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
                     if (qualifier == null) {
                         throw new BeansException(" There are multiple beans of the same type ：" + type);
                     } else {
-                        Object qualifierBean = beansOfType.get(qualifier.value());
+                        String resolveQualifier = beanFactory.resolveEmbeddedValue(qualifier.value());
+                        Object qualifierBean = beansOfType.get(resolveQualifier);
                         if (qualifierBean == null) {
-                            throw new BeansException(" No qualifying bean of type " + type + " available ");
+                            throw new BeansException(" No qualifying bean of type " + type + " available ：" + resolveQualifier);
                         } else {
-                            BeanUtil.setFieldValue(target, member.getName(), beansOfType.get(qualifier.value()));
+                            BeanUtil.setFieldValue(target, member.getName(), beansOfType.get(resolveQualifier));
                         }
                     }
                 } else {
@@ -103,7 +104,8 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
             }
             Value value = member.getAnnotation(Value.class);
             if (value != null) {
-                BeanUtil.setFieldValue(target, member.getName(), value.value());
+                String resolvedValue = beanFactory.resolveEmbeddedValue(value.value());
+                BeanUtil.setFieldValue(target, member.getName(), resolvedValue);
             }
         }
 

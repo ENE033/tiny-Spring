@@ -10,14 +10,14 @@ import org.aspectj.weaver.tools.PointcutPrimitive;
 import springframework.aop.springframework.aop.ClassFilter;
 import springframework.aop.springframework.aop.MethodMatcher;
 import springframework.aop.springframework.aop.Pointcut;
-import springframework.beans.ClassUtil;
+import springframework.util.ClassUtils;
 
 public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodMatcher {
 
     //支持的原语集合
     private final static Set<PointcutPrimitive> SUPPORTED_PRIMITIVES = new HashSet<>();
 
-    private final ClassLoader classLoader = ClassUtil.getDefaultClassLoader();
+    private final ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
 
     //添加EXECUTION原语
     static {

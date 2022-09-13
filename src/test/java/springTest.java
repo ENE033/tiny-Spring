@@ -1,5 +1,4 @@
 import entity.PetService;
-import entity.User;
 import entity.UserDao;
 import entity.aop.IUserService;
 import entity.aop.UserService;
@@ -11,17 +10,10 @@ import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.framework.DefaultAopProxyFactory;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import springframework.beans.ClassUtil;
+import springframework.util.ClassUtils;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
 
 public class springTest {
 
@@ -120,7 +112,7 @@ public class springTest {
     @Test
     public void test5() {
         IUserService userService = new UserService2();
-        IUserService o = (IUserService) Proxy.newProxyInstance(ClassUtil.getDefaultClassLoader(), userService.getClass().getInterfaces(), (proxy, method, args) -> {
+        IUserService o = (IUserService) Proxy.newProxyInstance(ClassUtils.getDefaultClassLoader(), userService.getClass().getInterfaces(), (proxy, method, args) -> {
             long start = System.currentTimeMillis();
             try {
                 Object proceed = method.invoke(userService, args);

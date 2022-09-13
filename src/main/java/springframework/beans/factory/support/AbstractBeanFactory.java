@@ -1,11 +1,13 @@
 package springframework.beans.factory.support;
 
 import springframework.beans.BeansException;
-import springframework.beans.ClassUtil;
+import springframework.beans.factory.PropertyPlaceholderConfigurer;
+import springframework.util.ClassUtils;
 import springframework.beans.factory.FactoryBean;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.config.BeanPostProcessor;
 import springframework.beans.factory.config.ConfigurableBeanFactory;
+import springframework.util.StringValueResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     //bean后置增强器列表
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
-    private final ClassLoader classLoader = ClassUtil.getDefaultClassLoader();
+    private final ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
+
+    private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
 
     @Override
     public Object getBean(String beanName) throws BeansException {
@@ -78,6 +82,20 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         this.beanPostProcessors.add(beanPostProcessor);
     }
 
+    @Override
+    public void addEmbeddedValueResolver(StringValueResolver valueResolver) {
+        embeddedValueResolvers.add(valueResolver);
+    }
+
+    @Override
+    public String resolveEmbeddedValue(String value) {
+        String result = value;
+        for (StringValueResolver embeddedValueResolver : embeddedValueResolvers) {
+            result = embeddedValueResolver.resolveStringValue(result);
+        }
+        return result;
+    }
+
     public List<BeanPostProcessor> getBeanPostProcessors() {
         return beanPostProcessors;
     }
@@ -85,7 +103,6 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     public ClassLoader getClassLoader() {
         return this.classLoader;
     }
-
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
