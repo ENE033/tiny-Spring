@@ -14,16 +14,16 @@
     <!--        <property name="name" Value="peter"/>-->
     <!--    </bean>-->
 
-    <bean id="user" class="entity.User">
-        <!--        <property name="age" value="${age}"/>-->
-        <!--        <property name="name" value="${name}"/>-->
-        <property name="pet" ref="pet"/>
-    </bean>
+    <!--    <bean id="user" class="entity.User">-->
+    <!--        <property name="age" value="${age}"/>-->
+    <!--        <property name="name" value="${name}"/>-->
+    <!--        <property name="pet" ref="pet"/>-->
+    <!--    </bean>-->
 
-    <bean id="pet1" class="entity.Pet">
-        <property name="age" value="78416"/>
-        <property name="name" value="ewqrwet"/>
-    </bean>
+    <!--    <bean id="pet1" class="entity.Pet">-->
+    <!--        <property name="age" value="78416"/>-->
+    <!--        <property name="name" value="ewqrwet"/>-->
+    <!--    </bean>-->
 
     <!--            <bean id="userDao" class="entity.UserDao" init-method="initMethod" destroy-method="destroy"/>-->
 
@@ -39,22 +39,23 @@
     <!--        <bean class="entity.event.ContextRefreshedEventListener" id="contextRefreshedEventListener"/>-->
     <!--        <bean class="entity.event.CustomEventListener" id="customEventListener"/>-->
 
-    <!--        <bean id="userService" class="entity.aop.UserService"/>-->
-    <!--        <bean id="autoProxyCreator"-->
-    <!--              class="springframework.aop.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>-->
-    <!--        <bean id="beforeAdvice" class="entity.aop.UserServiceBeforeAdvice"/>-->
-    <!--        <bean id="beforeAdviceInterceptor"-->
-    <!--              class="springframework.aop.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">-->
-    <!--            <property name="advice" ref="beforeAdvice"/>-->
-    <!--        </bean>-->
-    <!--        <bean id="advisor" class="springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">-->
-    <!--            <property name="expression" Value="execution(* entity.aop.*.*(..))"/>-->
-    <!--            <property name="advice" ref="beforeAdviceInterceptor"/>-->
-    <!--        </bean>-->
-    <context:component-scan base-package="entity"/>
-
-    <bean class="springframework.beans.factory.PropertyPlaceholderConfigurer" id="configurer">
-        <property name="location" value="property.properties"/>
+    <bean id="userService" class="entity.aop.UserService"/>
+    <bean id="autoProxyCreator"
+          class="springframework.aop.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <bean id="beforeAdvice" class="entity.aop.UserServiceBeforeAdvice"/>
+    <bean id="beforeAdviceInterceptor"
+          class="springframework.aop.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="methodBeforeAdvice" ref="beforeAdvice"/>
     </bean>
+    <bean id="advisor" class="springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* entity.aop.*.*(..))"/>
+        <property name="advice" ref="beforeAdviceInterceptor"/>
+    </bean>
+
+    <!--    <context:component-scan base-package="entity"/>-->
+
+    <!--    <bean class="springframework.beans.factory.PropertyPlaceholderConfigurer" id="configurer">-->
+    <!--        <property name="location" value="property.properties"/>-->
+    <!--    </bean>-->
 
 </beans>

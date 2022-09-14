@@ -47,12 +47,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Object bean;
         try {
             bean = resolveBeforeInstantiation(beanName, beanDefinition);
-            if (bean == null) {
-                //创建bean
-                bean = doCreateBean(beanName, beanDefinition, args);
+            if (bean != null) {
+                return bean;
             }
+            //创建bean
+            bean = doCreateBean(beanName, beanDefinition, args);
             //填充bean
-//            applyPropertyValues(beanName, bean, beanDefinition);
             populateBean(beanName, bean, beanDefinition);
             //初始化bean
             bean = initializeBean(beanName, bean, beanDefinition);
@@ -84,7 +84,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
         Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
         if (bean != null) {
-            applyBeanPostProcessorsAfterInitialization(bean, beanName);
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
         }
         return bean;
     }
@@ -134,16 +134,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                     }
                 }
             }
-
-            /**
-             * old version1
-             */
-            //for (Constructor<?> constructor : constructors) {
-            //    if (constructor.getParameters().length == argsSize) {
-            //        ctorToUse = constructor;
-            //        fixLength++;
-            //    }
-            //}
 
             if (fixLength == 0) {
                 throw new BeansException(" Could not resolve matching constructor on bean class [" + beanDefinition.getBeanClass().getName() + "]");

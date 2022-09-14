@@ -10,11 +10,11 @@ import java.lang.reflect.Method;
 /**
  * Cglib动态代理
  */
-public class Cglib2AopProxy implements AopProxy {
+public class CglibAopProxy implements AopProxy {
 
     private final AdvisedSupport advisedSupport;
 
-    public Cglib2AopProxy(AdvisedSupport advisedSupport) {
+    public CglibAopProxy(AdvisedSupport advisedSupport) {
         this.advisedSupport = advisedSupport;
     }
 

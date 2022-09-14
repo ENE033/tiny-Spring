@@ -2,23 +2,18 @@ package springframework.aop.springframework.aop.framework;
 
 import springframework.aop.springframework.aop.AdvisedSupport;
 
-public class ProxyFactory {
+public class ProxyFactory extends AdvisedSupport {
 
-    private final AdvisedSupport advisedSupport;
-
-    public ProxyFactory(AdvisedSupport advisedSupport) {
-        this.advisedSupport = advisedSupport;
-    }
 
     public Object getProxy() {
         return createAopProxy().getProxy();
     }
 
     private AopProxy createAopProxy() {
-        if (advisedSupport.isProxyTargetClass()) {
-            return new Cglib2AopProxy(advisedSupport);
+        if (isProxyTargetClass()) {
+            return new CglibAopProxy(this);
         }
-        return new JdkDynamicAopProxy(advisedSupport);
+        return new JdkDynamicAopProxy(this);
     }
 
 }

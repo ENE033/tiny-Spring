@@ -5,6 +5,7 @@ import springframework.aop.aopalliance.intercept.MethodInterceptor;
 import springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import springframework.aop.springframework.aop.framework.ProxyFactory;
 import springframework.aop.springframework.aop.*;
+import springframework.aop.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor;
 import springframework.beans.BeansException;
 import springframework.beans.factory.BeanFactory;
 import springframework.beans.factory.BeanFactoryAware;
@@ -29,6 +30,31 @@ public class DefaultAdvisorAutoProxyCreator implements BeanFactoryAware, Instant
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        Class<?> beanClass = this.beanFactory.getBeanDefinition(beanName).getBeanClass();
+        if (isInfrastructureClass(beanClass)) {
+            return bean;
+        }
+        Collection<AspectJExpressionPointcutAdvisor> advisors = beanFactory.getBeansOfType(AspectJExpressionPointcutAdvisor.class).values();
+        for (AspectJExpressionPointcutAdvisor advisor : advisors) {
+            ClassFilter classFilter = advisor.getPointcut().getClassFilter();
+            if (!classFilter.matches(beanClass)) {
+                continue;
+            }
+            ProxyFactory proxyFactory = new ProxyFactory();
+//            Object bean = beanFactory.getBean(beanName, beanClass);
+            TargetSource targetSource;
+            try {
+                targetSource = new TargetSource(bean);
+            } catch (Exception e) {
+                throw new BeansException(" targetSource filled in failed ", e);
+            }
+            proxyFactory.setTargetSource(targetSource);
+            proxyFactory.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
+            proxyFactory.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
+//            advisedSupport.setMethodMatcher((AspectJExpressionPointcut) advisor.getPointcut());
+            proxyFactory.setProxyTargetClass(false);
+            return proxyFactory.getProxy();
+        }
         return bean;
     }
 
@@ -38,30 +64,6 @@ public class DefaultAdvisorAutoProxyCreator implements BeanFactoryAware, Instant
 
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
-        if (isInfrastructureClass(beanClass)) {
-            return null;
-        }
-        Collection<AspectJExpressionPointcutAdvisor> advisors = beanFactory.getBeansOfType(AspectJExpressionPointcutAdvisor.class).values();
-        for (AspectJExpressionPointcutAdvisor advisor : advisors) {
-            ClassFilter classFilter = advisor.getPointcut().getClassFilter();
-            if (!classFilter.matches(beanClass)) {
-                continue;
-            }
-            AdvisedSupport advisedSupport = new AdvisedSupport();
-//            Object bean = beanFactory.getBean(beanName, beanClass);
-            TargetSource targetSource;
-            try {
-                targetSource = new TargetSource(beanClass.getDeclaredConstructor().newInstance());
-            } catch (Exception e) {
-                throw new BeansException(" targetSource filled in failed ", e);
-            }
-            advisedSupport.setTargetSource(targetSource);
-            advisedSupport.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
-            advisedSupport.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
-//            advisedSupport.setMethodMatcher((AspectJExpressionPointcut) advisor.getPointcut());
-            advisedSupport.setProxyTargetClass(false);
-            return new ProxyFactory(advisedSupport).getProxy();
-        }
-        return null;
+        return this.beanFactory.getSingleton(beanName);
     }
 }

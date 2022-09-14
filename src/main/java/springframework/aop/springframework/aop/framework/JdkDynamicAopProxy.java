@@ -14,31 +14,31 @@ import java.lang.reflect.Proxy;
 public class JdkDynamicAopProxy implements AopProxy, InvocationHandler {
 
     //AOP 代理配置管理器
-    private final AdvisedSupport advised;
+    private final AdvisedSupport advisedSupport;
 
-    public JdkDynamicAopProxy(AdvisedSupport advised) {
-        this.advised = advised;
+    public JdkDynamicAopProxy(AdvisedSupport advisedSupport) {
+        this.advisedSupport = advisedSupport;
     }
 
     //执行方法拦截器或调用原方法
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         //判断方法是否与目标类匹配
-        if (advised.getMethodMatcher().matches(method, advised.getTargetSource().getTargetClass())) {
+        if (advisedSupport.getMethodMatcher().matches(method, advisedSupport.getTargetSource().getTargetClass())) {
             //获取方法拦截器
-            MethodInterceptor methodInterceptor = advised.getMethodInterceptor();
+            MethodInterceptor methodInterceptor = advisedSupport.getMethodInterceptor();
             //执行方法拦截器中的增加逻辑代码，传入一个ReflectiveMethodInvocation用于执行原方法
-            return methodInterceptor.invoke(new ReflectiveMethodInvocation(advised.getTargetSource().getTarget(), method, args));
+            return methodInterceptor.invoke(new ReflectiveMethodInvocation(advisedSupport.getTargetSource().getTarget(), method, args));
         }
         //如果不是切点，则反射执行原方法
-        return method.invoke(advised.getTargetSource().getTarget(), args);
+        return method.invoke(advisedSupport.getTargetSource().getTarget(), args);
     }
 
     @Override
     public Object getProxy() {
         return Proxy.newProxyInstance(
                 ClassUtils.getDefaultClassLoader(),
-                advised.getTargetSource().getTargetClass().getInterfaces(),
+                advisedSupport.getTargetSource().getTargetClass().getInterfaces(),
                 this);
     }
 

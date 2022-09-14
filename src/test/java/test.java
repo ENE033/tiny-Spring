@@ -6,12 +6,11 @@ import org.junit.Test;
 import springframework.aop.springframework.aop.AdvisedSupport;
 import springframework.aop.springframework.aop.TargetSource;
 import springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcut;
-import springframework.aop.springframework.aop.framework.Cglib2AopProxy;
+import springframework.aop.springframework.aop.framework.CglibAopProxy;
 import springframework.aop.springframework.aop.framework.JdkDynamicAopProxy;
 import springframework.beans.BeanUtils;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
-import springframework.beans.factory.PropertyPlaceholderConfigurer;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.config.BeanReference;
 import springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -210,7 +209,7 @@ public class test {
         advisedSupport.setTargetSource(new TargetSource(blogService));
         advisedSupport.setMethodInterceptor(new PeerInterceptor());
         advisedSupport.setMethodMatcher(expressionPointcut);
-        IBlogService proxy = (IBlogService) new Cglib2AopProxy(advisedSupport).getProxy();
+        IBlogService proxy = (IBlogService) new CglibAopProxy(advisedSupport).getProxy();
         Blog blog1 = new Blog(123L, "今天天气真好", LocalDate.now());
         proxy.getBlogContext(blog1);
         proxy.getBlogDate(blog1);
@@ -222,6 +221,7 @@ public class test {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
         IUserService userService = context.getBean("userService", IUserService.class);
         System.out.println(userService);
+        System.out.println(userService.getClass());
         System.out.println(userService.queryUserInfo());
     }
 
