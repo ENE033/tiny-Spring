@@ -1,6 +1,9 @@
 package springframework.aop.springframework.aop.framework;
 
 import springframework.aop.springframework.aop.AdvisedSupport;
+import springframework.aop.springframework.aop.TargetSource;
+
+import java.lang.reflect.Proxy;
 
 public class ProxyFactory extends AdvisedSupport {
 
@@ -10,10 +13,16 @@ public class ProxyFactory extends AdvisedSupport {
     }
 
     private AopProxy createAopProxy() {
-        if (isProxyTargetClass()) {
+        if (!isProxyTargetClass()) {
+            return new JdkDynamicAopProxy(this);
+        } else {
+            TargetSource targetSource = getTargetSource();
+            Class<?> targetClass = targetSource.getTargetClass();
+            if (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) {
+                return new JdkDynamicAopProxy(this);
+            }
             return new CglibAopProxy(this);
         }
-        return new JdkDynamicAopProxy(this);
     }
 
 }

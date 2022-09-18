@@ -8,6 +8,7 @@ import springframework.aop.springframework.aop.TargetSource;
 import springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcut;
 import springframework.aop.springframework.aop.framework.CglibAopProxy;
 import springframework.aop.springframework.aop.framework.JdkDynamicAopProxy;
+import springframework.aop.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import springframework.beans.BeanUtils;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
@@ -19,8 +20,10 @@ import springframework.context.support.AbstractApplicationContext;
 import springframework.context.support.AbstractRefreshableApplicationContext;
 import springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.core.io.Resource;
+import springframework.util.ClassUtils;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 
 public class test {
@@ -180,7 +183,7 @@ public class test {
         AdvisedSupport advisedSupport = new AdvisedSupport();
         advisedSupport.setTargetSource(new TargetSource(userService));
         PeerInterceptor peerInterceptor = new PeerInterceptor();
-        advisedSupport.setMethodInterceptor(peerInterceptor);
+//        advisedSupport.setMethodInterceptor(peerInterceptor);
         advisedSupport.setMethodMatcher(pointcut);
         //通过原生jdk的方式获取获取代理对象
         IUserService proxy = (IUserService) new JdkDynamicAopProxy(advisedSupport).getProxy();
@@ -191,7 +194,7 @@ public class test {
         IBlogService blogService = new BlogService();
         AdvisedSupport advisedSupport1 = new AdvisedSupport();
         advisedSupport1.setTargetSource(new TargetSource(blogService));
-        advisedSupport1.setMethodInterceptor(peerInterceptor);
+//        advisedSupport1.setMethodInterceptor(peerInterceptor);
         advisedSupport1.setMethodMatcher(pointcut);
         IBlogService proxy1 = (IBlogService) new JdkDynamicAopProxy(advisedSupport1).getProxy();
         Blog blog = proxy1.getBlog();
@@ -207,7 +210,7 @@ public class test {
         AspectJExpressionPointcut expressionPointcut = new AspectJExpressionPointcut("execution(* entity.aop.*.*(..))");
         IBlogService blogService = new BlogService();
         advisedSupport.setTargetSource(new TargetSource(blogService));
-        advisedSupport.setMethodInterceptor(new PeerInterceptor());
+//        advisedSupport.setMethodInterceptor(new PeerInterceptor());
         advisedSupport.setMethodMatcher(expressionPointcut);
         IBlogService proxy = (IBlogService) new CglibAopProxy(advisedSupport).getProxy();
         Blog blog1 = new Blog(123L, "今天天气真好", LocalDate.now());
@@ -240,8 +243,15 @@ public class test {
 
     @Test
     public void test16() {
-
-
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml.xml");
+        IUserService userService = context.getBean("userService", IUserService.class);
+        Blog blog = context.getBean("blog", Blog.class);
+        System.out.println(blog.getClass());
+        blog.setContext("dwqrt");
+        System.out.println(blog.getContext());
+//        System.out.println(userService.getClass());
+//        System.out.println(userService.queryUserInfo());
+//        System.out.println(userService.addInfo());
     }
 
 

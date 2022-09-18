@@ -1,5 +1,9 @@
 package springframework.util;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class ClassUtils {
 
     public static final String CGLIB_CLASS_SEPARATOR = "$$EnhancerByCGLIB$$";
@@ -25,4 +29,27 @@ public class ClassUtils {
         return className != null && className.contains(CGLIB_CLASS_SEPARATOR);
     }
 
+    public static Class<?> getUserClass(Class<?> clazz) {
+        if (isCglibProxyClass(clazz)) {
+            Class<?> superclass = clazz.getSuperclass();
+            if (superclass != null && superclass != Object.class) {
+                return superclass;
+            }
+        }
+        return clazz;
+    }
+
+    public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz) {
+//        clazz = getUserClass(clazz);
+        Set<Class<?>> interfaces = new LinkedHashSet<>();
+        if (clazz.isInterface()) {
+            interfaces.add(clazz);
+        }
+        Class<?> current = clazz;
+        while (current != null) {
+            interfaces.addAll(Arrays.asList(clazz.getInterfaces()));
+            current = current.getSuperclass();
+        }
+        return interfaces;
+    }
 }

@@ -39,4 +39,13 @@ public class Blog {
     public void setID(Long ID) {
         this.ID = ID;
     }
+
+//    @Override
+//    public String toString() {
+//        return "Blog{" +
+//                "ID=" + ID +
+//                ", context='" + context + '\'' +
+//                ", createDate=" + createDate +
+//                '}';
+//    }
 }

@@ -10,6 +10,7 @@ import org.aspectj.weaver.tools.PointcutPrimitive;
 import springframework.aop.springframework.aop.ClassFilter;
 import springframework.aop.springframework.aop.MethodMatcher;
 import springframework.aop.springframework.aop.Pointcut;
+import springframework.beans.BeansException;
 import springframework.util.ClassUtils;
 
 public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodMatcher {
@@ -58,8 +59,15 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
 
     //确定此切入点是否与给定方法的执行相匹配
     @Override
-    public boolean matches(Method method, Class<?> targetClass) {
-        return pointcutExpression.matchesMethodExecution(method).alwaysMatches();
+    public boolean matches(Method method, Class<?> targetClass) throws BeansException {
+        Method declaredMethod = null;
+        try {
+            declaredMethod = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
+        } catch (NoSuchMethodException e) {
+//            throw new BeansException(" No such method ：" + method.getName());
+            return false;
+        }
+        return pointcutExpression.matchesMethodExecution(declaredMethod).alwaysMatches();
     }
 
     @Override

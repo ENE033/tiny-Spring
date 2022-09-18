@@ -6,7 +6,7 @@ import springframework.aop.springframework.aop.PointcutAdvisor;
 
 public class AspectJExpressionPointcutAdvisor implements PointcutAdvisor {
 
-    private AspectJExpressionPointcut pointcut;
+    private AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
 
     private Advice advice;
 
@@ -23,9 +23,7 @@ public class AspectJExpressionPointcutAdvisor implements PointcutAdvisor {
 
     @Override
     public Pointcut getPointcut() {
-        if (null == pointcut) {
-            return new AspectJExpressionPointcut(expression);
-        }
+        pointcut.setExpression(expression);
         return pointcut;
     }
 
