@@ -43,24 +43,30 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
     public <T> T doGetBean(String beanName, Class<T> requireType, Object[] args) throws BeansException {
         Object sharedInstance = getSingleton(beanName);
-        T castedInstance;
-        try {
-            if (sharedInstance == null) {
-                BeanDefinition beanDefinition = getBeanDefinition(beanName);
-                Object bean = createBean(beanName, beanDefinition, args);
-                Object objectForBeanInstance = getObjectForBeanInstance(bean, beanName);
-                castedInstance = requireType.cast(objectForBeanInstance);
+        Object beanInstance;
+        if (sharedInstance != null) {
+            beanInstance = getObjectForBeanInstance(sharedInstance, beanName);
+        } else {
+            BeanDefinition beanDefinition = getBeanDefinition(beanName);
+            if (beanDefinition.isSingleton()) {
+                sharedInstance = getSingleton(beanName, () -> {
+                    try {
+                        return createBean(beanName, beanDefinition, args);
+                    } catch (Exception e) {
+                        destroySingleton(beanName);
+                        throw e;
+                    }
+                });
+                beanInstance = getObjectForBeanInstance(sharedInstance, beanName);
+            } else if (beanDefinition.isPrototype()) {
+                Object prototypeInstance;
+                prototypeInstance = createBean(beanName, beanDefinition, args);
+                beanInstance = getObjectForBeanInstance(prototypeInstance, beanName);
             } else {
-                Object objectForBeanInstance = getObjectForBeanInstance(sharedInstance, beanName);
-                castedInstance = requireType.cast(objectForBeanInstance);
+                throw new BeansException(" Unknown scope '" + beanDefinition.getScope() + "' of bean ：" + beanName);
             }
-        } catch (ClassCastException e) {
-            throw new BeansException(" Class cast failed ：", e);
         }
-        if (castedInstance == null) {
-            throw new BeansException(" Instance is null ：" + beanName);
-        }
-        return castedInstance;
+        return requireType.cast(beanInstance);
     }
 
 

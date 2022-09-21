@@ -1,7 +1,11 @@
 import entity.*;
 import entity.aop.*;
 import entity.aware.KnownAll;
+import entity.circle.A;
+import entity.circle.B;
+import entity.circle.C;
 import entity.event.CustomEvent;
+import net.sf.cglib.core.DebuggingClassWriter;
 import org.junit.Test;
 import springframework.aop.springframework.aop.AdvisedSupport;
 import springframework.aop.springframework.aop.TargetSource;
@@ -248,11 +252,21 @@ public class test {
         Blog blog = context.getBean("blog", Blog.class);
         System.out.println(blog.getClass());
         blog.setContext("dwqrt");
-        System.out.println(blog.getContext());
-//        System.out.println(userService.getClass());
-//        System.out.println(userService.queryUserInfo());
-//        System.out.println(userService.addInfo());
+        System.out.println(blog);
     }
 
-
+    @Test
+    public void test17() {
+//        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\java_workspace\\Spring\\src\\test\\java\\entity\\circle");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml1.xml");
+        A a = context.getBean("a", A.class);
+        B b = context.getBean("b", B.class);
+        C c = context.getBean("c", C.class);
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+        System.out.println(c.getA());
+        System.out.println(a.getB());
+        System.out.println(b.getC());
+    }
 }

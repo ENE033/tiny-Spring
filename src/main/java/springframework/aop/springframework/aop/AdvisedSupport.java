@@ -1,14 +1,11 @@
 package springframework.aop.springframework.aop;
 
-import springframework.aop.springframework.aop.Pointcut;
-import springframework.aop.springframework.aop.PointcutAdvisor;
-import org.springframework.util.Assert;
 import springframework.aop.aopalliance.aop.Advice;
 import springframework.aop.aopalliance.intercept.MethodInterceptor;
 import springframework.aop.springframework.aop.framework.ProxyConfig;
+import springframework.aop.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor;
 import springframework.aop.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor;
 import springframework.beans.BeansException;
-import springframework.util.ClassUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -107,6 +104,8 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
             } else {
                 if (advice instanceof MethodBeforeAdvice) {
                     methodInterceptors.add(new MethodBeforeAdviceInterceptor((MethodBeforeAdvice) advice));
+                } else if (advice instanceof AfterReturningAdvice) {
+                    methodInterceptors.add(new AfterReturningAdviceInterceptor((AfterReturningAdvice) advice));
                 }
             }
         }

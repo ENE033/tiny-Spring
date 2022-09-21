@@ -40,12 +40,12 @@ public class Blog {
         this.ID = ID;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Blog{" +
-//                "ID=" + ID +
-//                ", context='" + context + '\'' +
-//                ", createDate=" + createDate +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "Blog{" +
+                "ID=" + ID +
+                ", context='" + context + '\'' +
+                ", createDate=" + createDate +
+                '}';
+    }
 }

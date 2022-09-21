@@ -52,9 +52,15 @@
         <property name="expression" value="execution(* entity.aop.*.*(..))"/>
         <property name="advice" ref="beforeAdvice"/>
     </bean>
-    <bean id="advisor1" class="springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+    <bean id="afterReturnAdvice" class="entity.aop.UserServiceAfterReturnAdvice"/>
+    <bean id="advisor2" class="springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
         <property name="expression" value="execution(* entity.aop.*.*(..))"/>
-        <property name="advice" ref="beforeAdviceInterceptor"/>
+        <property name="advice" ref="afterReturnAdvice"/>
+    </bean>
+    <bean id="peerInterceptor" class="entity.aop.PeerInterceptor"/>
+    <bean id="advisor3" class="springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* entity.aop.*.*(..))"/>
+        <property name="advice" ref="peerInterceptor"/>
     </bean>
 
     <!--    <context:component-scan base-package="entity"/>-->

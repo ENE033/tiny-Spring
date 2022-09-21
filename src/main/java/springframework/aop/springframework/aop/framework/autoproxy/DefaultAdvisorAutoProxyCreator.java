@@ -7,17 +7,19 @@ import springframework.aop.springframework.aop.framework.ProxyProcessorSupport;
 import springframework.beans.BeansException;
 import springframework.beans.factory.BeanFactory;
 import springframework.beans.factory.BeanFactoryAware;
-import springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
+import springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
 import springframework.beans.factory.support.DefaultListableBeanFactory;
 import springframework.util.ClassUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class DefaultAdvisorAutoProxyCreator extends ProxyProcessorSupport implements BeanFactoryAware, InstantiationAwareBeanPostProcessor {
+public class DefaultAdvisorAutoProxyCreator extends ProxyProcessorSupport implements BeanFactoryAware, SmartInstantiationAwareBeanPostProcessor {
 
     DefaultListableBeanFactory beanFactory;
+    private final Map<Object, Object> earlyProxyReferences = new ConcurrentHashMap<>(8);
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -32,9 +34,12 @@ public class DefaultAdvisorAutoProxyCreator extends ProxyProcessorSupport implem
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean != null) {
-            return wrapIfNecessary(bean, beanName);
+            Object cacheKey = getCacheKey(bean.getClass(), beanName);
+            if (this.earlyProxyReferences.remove(cacheKey) != bean) {
+                return wrapIfNecessary(bean, beanName);
+            }
         }
-        return null;
+        return bean;
     }
 
     private Object wrapIfNecessary(Object bean, String beanName) {
@@ -50,7 +55,6 @@ public class DefaultAdvisorAutoProxyCreator extends ProxyProcessorSupport implem
     }
 
     protected Object createProxy(Class<?> beanClass, String beanName, Object[] specificInterceptors, TargetSource targetSource) {
-
         Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
         ProxyFactory proxyFactory = new ProxyFactory();
         evaluateProxyInterfaces(beanClass, proxyFactory);
@@ -147,4 +151,18 @@ public class DefaultAdvisorAutoProxyCreator extends ProxyProcessorSupport implem
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
         return this.beanFactory.getSingleton(beanName);
     }
+
+    @Override
+    public Object getEarlyBeanReference(Object bean, String beanName) {
+        Object cacheKey = getCacheKey(bean.getClass(), beanName);
+        this.earlyProxyReferences.put(cacheKey, bean);
+        return wrapIfNecessary(bean, beanName);
+    }
+
+
+    private Object getCacheKey(Class<?> clazz, String beanName) {
+        return beanName.isEmpty() ? clazz : beanName;
+    }
+
+
 }

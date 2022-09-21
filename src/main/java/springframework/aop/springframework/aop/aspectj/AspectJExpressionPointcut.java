@@ -60,7 +60,10 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
     //确定此切入点是否与给定方法的执行相匹配
     @Override
     public boolean matches(Method method, Class<?> targetClass) throws BeansException {
-        Method declaredMethod = null;
+        if (ClassUtils.isCglibProxyClass(targetClass)) {
+            targetClass = targetClass.getSuperclass();
+        }
+        Method declaredMethod;
         try {
             declaredMethod = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
         } catch (NoSuchMethodException e) {
