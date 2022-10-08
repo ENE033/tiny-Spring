@@ -3,16 +3,13 @@ import entity.aop.*;
 import entity.aware.KnownAll;
 import entity.circle.A;
 import entity.circle.B;
-import entity.circle.C;
 import entity.event.CustomEvent;
-import net.sf.cglib.core.DebuggingClassWriter;
 import org.junit.Test;
 import springframework.aop.springframework.aop.AdvisedSupport;
 import springframework.aop.springframework.aop.TargetSource;
 import springframework.aop.springframework.aop.aspectj.AspectJExpressionPointcut;
 import springframework.aop.springframework.aop.framework.CglibAopProxy;
 import springframework.aop.springframework.aop.framework.JdkDynamicAopProxy;
-import springframework.aop.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import springframework.beans.BeanUtils;
 import springframework.beans.PropertyValue;
 import springframework.beans.PropertyValues;
@@ -24,10 +21,8 @@ import springframework.context.support.AbstractApplicationContext;
 import springframework.context.support.AbstractRefreshableApplicationContext;
 import springframework.context.support.ClassPathXmlApplicationContext;
 import springframework.core.io.Resource;
-import springframework.util.ClassUtils;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 
 
 public class test {
@@ -58,7 +53,6 @@ public class test {
     @Test
     public void test3() {
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
-        beanFactory.setSimpleStrategy(true);
 
         BeanDefinition petDefinition = new BeanDefinition(Pet.class);
         PropertyValue p1 = new PropertyValue("name", "dog");
@@ -261,12 +255,5 @@ public class test {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml1.xml");
         A a = context.getBean("a", A.class);
         B b = context.getBean("b", B.class);
-        C c = context.getBean("c", C.class);
-        System.out.println(a);
-        System.out.println(b);
-        System.out.println(c);
-        System.out.println(c.getA());
-        System.out.println(a.getB());
-        System.out.println(b.getC());
     }
 }

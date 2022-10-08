@@ -149,7 +149,8 @@ public class DefaultAdvisorAutoProxyCreator extends ProxyProcessorSupport implem
 
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
-        return this.beanFactory.getSingleton(beanName);
+        //return this.beanFactory.getSingleton(beanName);
+        return null;
     }
 
     @Override

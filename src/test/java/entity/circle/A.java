@@ -5,7 +5,6 @@ public class A {
     private String name;
 
     public B getB() {
-        System.out.println(b);
         return b;
     }
 

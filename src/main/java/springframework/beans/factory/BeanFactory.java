@@ -2,6 +2,10 @@ package springframework.beans.factory;
 
 import springframework.beans.BeansException;
 
+/**
+ * bean工厂用于根据beanName获取bean，
+ * 用于访问 Spring bean 容器的根接口。
+ */
 public interface BeanFactory {
     //通过bean的id获取bean，无参构造器
     Object getBean(String name) throws BeansException;

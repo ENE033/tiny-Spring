@@ -11,11 +11,11 @@ import java.util.Map;
  */
 public interface ListableBeanFactory extends BeanFactory {
     /**
-     * 根据bean类型返回bean实例
+     * 实例化所有type类型的bean并返回
      *
      * @param <T>
-     * @param type
-     * @return
+     * @param type bean的类型
+     * @return map，键为beanName，值为bean
      * @throws BeansException
      */
     <T> Map<String, T> getBeansOfType(Class<T> type);

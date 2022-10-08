@@ -29,7 +29,6 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
     private final Map<String, InjectionMetadata> injectionMetadataCache = new ConcurrentHashMap<>(256);
 
     @Override
-
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
     }
@@ -39,7 +38,15 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
         autowiredAnnotationTypes.add(Autowired.class);
     }
 
+    /**
+     * 源码中：这个方法不仅获取类中被注解修饰的字段，还获取类中被注解修饰的方法
+     * 本项目仅仅获取了类中被注解修饰的字段
+     *
+     * @param clazz
+     * @return
+     */
     InjectionMetadata buildAutowiringMetadata(Class<?> clazz) {
+
         List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
         for (Field declaredField : clazz.getDeclaredFields()) {
             for (Annotation annotation : declaredField.getDeclaredAnnotations()) {

@@ -28,11 +28,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
         beanDefinitionMap.put(beanName, beanDefinition);
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
     /**
      * 实例化并获取指定类型的bean
      */
+    @Override
+    @SuppressWarnings("unchecked")
     public <T> Map<String, T> getBeansOfType(Class<T> type) {
         //map集合，键为String，值为T
         Map<String, T> result = new HashMap<>();

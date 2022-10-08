@@ -25,14 +25,24 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
      */
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 
-
     /**
      * 执行disposableBeans中的bean的销毁方法
      */
     void destroySingletons();
 
+    /**
+     * 为嵌入值（例如注释属性）添加字符串解析器。
+     *
+     * @param valueResolver
+     */
     void addEmbeddedValueResolver(StringValueResolver valueResolver);
 
+    /**
+     * 解析给定的嵌入值，例如注解属性。
+     *
+     * @param value
+     * @return
+     */
     String resolveEmbeddedValue(String value);
 
 }

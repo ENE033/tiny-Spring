@@ -17,6 +17,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     //创建bean的策略
     private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
+    /**
+     * 设置beanFactory的实例化策略
+     *
+     * @param isSimple
+     */
     public void setSimpleStrategy(boolean isSimple) {
         if (isSimple) {
             this.instantiationStrategy = new SimpleInstantiationStrategy();
@@ -50,12 +55,21 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return bean;
     }
 
+    /**
+     * 填充bean
+     *
+     * @param beanName
+     * @param bean
+     * @param beanDefinition
+     */
     protected void populateBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        //注入使用注解@Value和@Autowired的属性
         for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
             if (InstantiationAwareBeanPostProcessor.class.isAssignableFrom(beanPostProcessor.getClass())) {
                 ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessProperties(beanDefinition.getPropertyValues(), bean, beanName);
             }
         }
+        //注入xml解析的属性，会覆盖掉注解注入的属性
         applyPropertyValues(beanName, bean, beanDefinition);
     }
 
@@ -65,18 +79,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
         }
         return bean;
-    }
-
-    protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
-        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
-            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
-                Object bean = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
-                if (bean != null) {
-                    return bean;
-                }
-            }
-        }
-        return null;
     }
 
     /**
@@ -212,6 +214,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
     }
 
+    /**
+     * 解析属性
+     * 如果是TypedStringValue，则解析为字符串
+     * 如果是BeanReference，则解析为bean对象
+     *
+     * @param originalValue
+     * @return
+     */
     private Object resolveValueIfNecessary(Object originalValue) {
         Object value = originalValue;
         if (value instanceof BeanReference) {
@@ -232,7 +242,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @param beanDefinition
      * @return
      */
-    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+    @Override
+    public Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
 
         //调用感知方法
         invokeAwareMethods(beanName, bean);
@@ -251,10 +262,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return wrappedBean;
     }
 
+    /**
+     * 通过判断来进行通知实现相应接口的类，并执行感知方法
+     *
+     * @param beanName
+     * @param bean
+     */
     private void invokeAwareMethods(String beanName, Object bean) {
-        /**
-         * 通过判断来进行通知实现相应接口的类，并执行感知方法
-         */
         if (bean instanceof Aware) {
             if (bean instanceof BeanFactoryAware) {
                 ((BeanFactoryAware) bean).setBeanFactory(this);
@@ -305,6 +319,25 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 throw new BeansException(" Unknown error currently ：" + initMethodName, e);
             }
         }
+    }
+
+    /**
+     * 执行实例化前的后置处理器
+     *
+     * @param beanClass
+     * @param beanName
+     * @return
+     */
+    protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object bean = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (bean != null) {
+                    return bean;
+                }
+            }
+        }
+        return null;
     }
 
     /**

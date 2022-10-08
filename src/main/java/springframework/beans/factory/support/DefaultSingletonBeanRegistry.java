@@ -46,7 +46,6 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
         }
     }
 
-
     @Override
     public Object getSingleton(String beanName) {
         return getSingleton(beanName, true);

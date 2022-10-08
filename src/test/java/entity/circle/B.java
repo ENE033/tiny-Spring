@@ -1,15 +1,15 @@
 package entity.circle;
 
 public class B {
-    private C c;
+    private A a;
     private String name;
 
-    public C getC() {
-        return c;
+    public A getA() {
+        return a;
     }
 
-    public void setC(C c) {
-        this.c = c;
+    public void setA(A a) {
+        this.a = a;
     }
 
     public String getName() {
