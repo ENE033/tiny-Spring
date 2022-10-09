@@ -72,7 +72,7 @@ public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodM
         }
         Method declaredMethod;
         // 匹配方法，如果方法存在就算匹配成功
-        // 如果抛出了方法不存在异常则说明匹配不成功
+        // 如果捕获了方法不存在异常则说明匹配不成功
         try {
             declaredMethod = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
         } catch (NoSuchMethodException e) {

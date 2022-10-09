@@ -39,8 +39,13 @@ public class ClassUtils {
         return clazz;
     }
 
+    /**
+     * 获取clazz及其父类的所有接口
+     *
+     * @param clazz
+     * @return
+     */
     public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz) {
-//        clazz = getUserClass(clazz);
         Set<Class<?>> interfaces = new LinkedHashSet<>();
         if (clazz.isInterface()) {
             interfaces.add(clazz);

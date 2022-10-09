@@ -128,6 +128,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return exposedBean;
     }
 
+    /**
+     * 三级缓存中的ObjectFactory的getObject方法中会调用此方法按需生成代理对象
+     *
+     * @param bean
+     * @param beanName
+     * @return
+     */
     protected Object getEarlyBeanReference(Object bean, String beanName) {
         Object exposedBean = bean;
         for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {

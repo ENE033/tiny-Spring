@@ -5,12 +5,13 @@ import springframework.aop.springframework.aop.MethodBeforeAdvice;
 import springframework.aop.aopalliance.intercept.MethodInterceptor;
 import springframework.aop.aopalliance.intercept.MethodInvocation;
 
+/**
+ * 包装MethodBeforeAdvice的拦截器。
+ * 由AOP框架内部使用;应用程序开发人员不应该需要直接使用这个类。
+ */
 public class MethodBeforeAdviceInterceptor implements MethodInterceptor, BeforeAdvice {
 
     private MethodBeforeAdvice methodBeforeAdvice;
-
-    public MethodBeforeAdviceInterceptor() {
-    }
 
     public MethodBeforeAdviceInterceptor(MethodBeforeAdvice advice) {
         this.methodBeforeAdvice = advice;
