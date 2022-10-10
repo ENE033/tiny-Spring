@@ -21,12 +21,22 @@ public class ProxyFactory extends AdvisedSupport {
         return createAopProxy().getProxy();
     }
 
+    /**
+     * 创建代理对象
+     * 在源码中：
+     * 这个方法在AopProxyFactory中定义，在DefaultAopProxyFactory中实现
+     *
+     * @return
+     */
     private AopProxy createAopProxy() {
+        // 先判断是否代理类，如果不是则代理接口，则使用jdk动态代理
         if (!isProxyTargetClass()) {
             return new JdkDynamicAopProxy(this);
         } else {
             TargetSource targetSource = getTargetSource();
             Class<?> targetClass = targetSource.getTargetClass();
+            // 判断目标类是否接口，是否已经被动态代理过了，在源码中还需要判断是否lambda类
+            // 如果是则使用jdk动态代理
             if (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) {
                 return new JdkDynamicAopProxy(this);
             }

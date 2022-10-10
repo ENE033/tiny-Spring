@@ -11,7 +11,10 @@ import springframework.aop.springframework.aop.AfterReturningAdvice;
  */
 public class AfterReturningAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 
-    private final AfterReturningAdvice advice;
+    private AfterReturningAdvice advice;
+
+    public AfterReturningAdviceInterceptor() {
+    }
 
     public AfterReturningAdviceInterceptor(AfterReturningAdvice advice) {
         this.advice = advice;
@@ -22,5 +25,9 @@ public class AfterReturningAdviceInterceptor implements MethodInterceptor, After
         Object retVal = invocation.proceed();
         advice.afterReturning(retVal, invocation.getMethod(), invocation.getArguments(), invocation.getThis());
         return retVal;
+    }
+
+    public void setAdvice(AfterReturningAdvice advice) {
+        this.advice = advice;
     }
 }

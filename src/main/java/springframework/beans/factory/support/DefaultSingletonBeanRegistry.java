@@ -76,7 +76,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
                 singletonObject = singletonFactory.getObject();
                 addSingleton(beanName, singletonObject);
             } catch (BeansException e) {
-                throw new BeansException(" Bean create failed ：" + beanName);
+                throw new BeansException(" Bean create failed ：" + beanName, e);
             } finally {
                 afterSingletonCreation(beanName);
             }

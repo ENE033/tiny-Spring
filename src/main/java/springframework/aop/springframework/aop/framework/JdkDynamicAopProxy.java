@@ -27,13 +27,22 @@ public class JdkDynamicAopProxy implements AopProxy, InvocationHandler {
         this.proxiedInterfaces = AopUtils.completeProxiedInterfaces(this.advisedSupport);
     }
 
-    //执行方法拦截器或调用原方法
+    /**
+     * 执行方法拦截器或调用原方法
+     *
+     * @param proxy
+     * @param method
+     * @param args
+     * @return
+     * @throws Throwable
+     */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object retVal;
         TargetSource targetSource = this.advisedSupport.getTargetSource();
         Object target = targetSource.getTarget();
         Class<?> targetClass = target.getClass();
+        // 获取能增强该方法的拦截器
         List<Object> chain = advisedSupport.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);
         if (!chain.isEmpty()) {
             MethodInvocation methodInvocation = new ReflectiveMethodInvocation(target, method, args, chain);

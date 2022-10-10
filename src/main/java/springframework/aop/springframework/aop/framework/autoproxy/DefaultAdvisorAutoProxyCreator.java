@@ -74,9 +74,9 @@ public class DefaultAdvisorAutoProxyCreator extends ProxyProcessorSupport implem
         if (isInfrastructureClass(beanClass)) {
             return bean;
         }
-        // 获取该类为切入点的所有切面的拦截器
+        // 获取该类为切入点的所有切面
         Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(beanClass, beanName);
-        // 如果没有符合条件的拦截器，直接返回
+        // 如果没有符合条件的切面，直接返回
         if (specificInterceptors.length == 0) {
             return bean;
         }

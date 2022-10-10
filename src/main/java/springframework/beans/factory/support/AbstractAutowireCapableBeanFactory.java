@@ -63,13 +63,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * @param beanDefinition
      */
     protected void populateBean(String beanName, Object bean, BeanDefinition beanDefinition) {
-        //注入使用注解@Value和@Autowired的属性
+        // 注入使用注解@Value和@Autowired的属性
         for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
             if (InstantiationAwareBeanPostProcessor.class.isAssignableFrom(beanPostProcessor.getClass())) {
                 ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessProperties(beanDefinition.getPropertyValues(), bean, beanName);
             }
         }
-        //注入xml解析的属性，会覆盖掉注解注入的属性
+        // 注入xml解析的属性，会覆盖掉注解注入的属性
         applyPropertyValues(beanName, bean, beanDefinition);
     }
 

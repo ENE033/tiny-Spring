@@ -63,8 +63,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
 
+    /**
+     * 预实例化所有单例bean
+     *
+     * @throws BeansException
+     */
     @Override
-    //初始化所有单例bean
     public void preInstantiateSingletons() throws BeansException {
         for (String beanDefinitionName : getBeanDefinitionNames()) {
             BeanDefinition beanDefinition = getBeanDefinition(beanDefinitionName);
@@ -75,12 +79,24 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
         }
     }
 
+
+    /**
+     * 检查beanName是否存在，如果存在是否兼容
+     *
+     * @param beanName
+     * @param beanDefinition
+     * @return true：beanName尚未注册，
+     * false：beanName已经注册，但是beanName注册的beanDefinition与新的beanDefinition兼容
+     * @throws BeansException 两个beanDefinition不兼容
+     */
     @Override
     public boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws BeansException {
+        // 如果beanName对应的BeanDefinition不存在，返回true
         if (!containsBeanDefinition(beanName)) {
             return true;
         }
         BeanDefinition existingDef = getBeanDefinition(beanName);
+        // 如果两个beanDefinition兼容，返回false，不兼容则抛异常
         if (isCompatible(beanDefinition, existingDef)) {
             return false;
         } else {
@@ -88,6 +104,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
         }
     }
 
+    /**
+     * 判断两个beanDefinition是否兼容，即它们的beanClass是否相同
+     *
+     * @param newDefinition
+     * @param existingDefinition
+     * @return 如果两个beanDefinition的beanClass相同返回true，否则返回false
+     */
     @Override
     public boolean isCompatible(BeanDefinition newDefinition, BeanDefinition existingDefinition) {
         if (newDefinition.getBeanClass() == existingDefinition.getBeanClass()) {

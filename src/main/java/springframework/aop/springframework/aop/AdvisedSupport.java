@@ -82,7 +82,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
     }
 
     /**
-     * 判断指定接口是否代理接口或者代理接口的父接口
+     * 判断intf是否代理接口或者代理接口的父接口
      *
      * @param intf
      * @return

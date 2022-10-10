@@ -8,7 +8,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * 可被方法拦截器拦截的连接点，可以使用反射执行目标对象原方法
+ * Spring对AOP联盟方法调用接口的实现，实现了扩展的ProxyMethodInvocation接口。
+ * 使用反射调用目标对象。重复调用proceed()
+ * 注意:这个类被认为是内部的，不应该被直接访问。
  */
 public class ReflectiveMethodInvocation implements MethodInvocation {
 
@@ -49,12 +51,21 @@ public class ReflectiveMethodInvocation implements MethodInvocation {
         return interceptors;
     }
 
+    /**
+     * 增强点执行增强方法和原方法
+     *
+     * @return
+     * @throws Throwable
+     */
     @Override
     public Object proceed() throws Throwable {
+        // 如果已经将拦截器的增强逻辑执行完毕，则执行原方法
         if (currentInterceptorIndex == this.interceptors.size() - 1) {
             return method.invoke(target, arguments);
         }
+        // 获取下一个拦截器
         Object interceptor = this.interceptors.get(++currentInterceptorIndex);
+        // 执行拦截器的增强逻辑
         return ((MethodInterceptor) interceptor).invoke(this);
     }
 }

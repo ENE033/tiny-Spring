@@ -77,15 +77,16 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
         int beanSize = 0;
 
-        //同一个文件下的beanName集合，在同一个xml文件下不允许重复的id
+        // 同一个文件下的beanName集合，在同一个xml文件下不允许重复的id
         Set<String> beanNameSet = new HashSet<>();
 
         for (int i = 0; i < childNodes.getLength(); i++) {
-            //判断元素
+            // 判断元素
             if (!(childNodes.item(i) instanceof Element)) {
                 continue;
             }
 
+            // 获取标签的名字
             String nodeName = childNodes.item(i).getNodeName();
 
             if ("bean".equals(nodeName)) {
@@ -220,7 +221,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     private int resolveComponentScan(Element component) {
+        // 获取需要扫描的包路径
         String attribute = component.getAttribute("base-package");
+        // 检查beanDefinitionMap中是否存在autowiredAnnotationProcessor，
+        // 如果不存在则需要在beanDefinitionMap中创建一个
         if (!getRegistry().containsBeanDefinition("autowiredAnnotationProcessor")) {
             getRegistry().registerBeanDefinition("autowiredAnnotationProcessor", new GenericBeanDefinition(AutowiredAnnotationBeanPostProcessor.class));
         }
@@ -228,6 +232,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     public int scanPackage(String path) {
+        // 以","作为分隔符分隔包路径
         String[] basePackages = path.split(",");
         ClassPathBeanDefinitionScanner classPathBeanDefinitionScanner = new ClassPathBeanDefinitionScanner(getRegistry());
         return classPathBeanDefinitionScanner.doScan(basePackages);
