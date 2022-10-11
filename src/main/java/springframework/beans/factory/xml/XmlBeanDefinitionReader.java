@@ -58,6 +58,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 
     /**
+     * 在源码中：
+     * 解析xml元素的方法是在DefaultBeanDefinitionDocumentReader类中定义的parseBeanDefinitions方法
+     * <p>
      * 解析xml并读取bean和bean的属性
      *
      * @param inputStream

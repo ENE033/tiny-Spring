@@ -24,6 +24,7 @@ public class ClassPathScanningCandidateComponentProvider {
      */
     public Set<BeanDefinition> findCandidateComponents(String basePackage) {
         Set<BeanDefinition> candidates = new LinkedHashSet<>();
+        // 使用huTools的ClassUtil扫描指定类路径的指定的注解
         Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation(basePackage, Component.class);
         for (Class<?> aClass : classes) {
             candidates.add(new ScannedGenericBeanDefinition(aClass));
