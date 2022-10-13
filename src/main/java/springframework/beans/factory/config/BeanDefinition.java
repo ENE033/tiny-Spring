@@ -25,34 +25,37 @@ import java.util.Objects;
  */
 public class BeanDefinition {
 
-    //单例模式的标识
+    // 单例模式的标识
     public static String SCOPE_SINGLETON = "singleton";
 
-    //原型模式的标识
+    // 原型模式的标识
     public static String SCOPE_PROTOTYPE = "prototype";
 
-    //bean的类型
+    // bean的类型
     private volatile Object beanClass;
 
-    //bean的属性集
+    // bean的属性集
     private PropertyValues propertyValues;
 
-    //bean的来源
+    // bean的来源
     private Resource resource;
 
-    //bean的初始化方法名
+    // bean的初始化方法名
     private String initMethodName;
 
-    //bean的销毁方法名
+    // bean的销毁方法名
     private String destroyMethodName;
 
-    //bean的作用域，默认为单例
+    // bean的作用域，默认为单例
     private String scope = SCOPE_SINGLETON;
 
     private boolean singleton = true;
 
     private boolean prototype = false;
 
+    public BeanDefinition() {
+        this(null);
+    }
 
     public BeanDefinition(Class<?> beanClass) {
         this(beanClass, new PropertyValues());

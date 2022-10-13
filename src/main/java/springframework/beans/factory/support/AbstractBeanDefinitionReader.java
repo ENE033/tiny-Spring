@@ -50,12 +50,10 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
      * @throws BeansException
      */
     @Override
-    public int loadBeanDefinitions(Resource... resources) throws BeansException {
-        int count = 0;
+    public void loadBeanDefinitions(Resource... resources) throws BeansException {
         for (Resource resource : resources) {
-            count += loadBeanDefinitions(resource);
+            loadBeanDefinitions(resource);
         }
-        return count;
     }
 
     /**
@@ -66,12 +64,10 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
      * @throws BeansException
      */
     @Override
-    public int loadBeanDefinitions(String... locations) throws BeansException {
-        int count = 0;
+    public void loadBeanDefinitions(String... locations) throws BeansException {
         for (String location : locations) {
-            count += loadBeanDefinitions(location);
+            loadBeanDefinitions(location);
         }
-        return count;
     }
 
     /**
@@ -82,9 +78,9 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
      * @throws BeansException
      */
     @Override
-    public int loadBeanDefinitions(String location) throws BeansException {
+    public void loadBeanDefinitions(String location) throws BeansException {
         ResourceLoader resourceLoader = getResourceLoader();
         currentResource = resourceLoader.getResource(location);
-        return loadBeanDefinitions(currentResource);
+        loadBeanDefinitions(currentResource);
     }
 }

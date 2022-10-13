@@ -83,7 +83,7 @@ public class test {
         Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("classpath:xml.xml");
 //        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("D:\\java_workspace\\Spring\\src\\main\\resources\\xml.xml");
 //        Resource resource = xmlBeanDefinitionReader.getResourceLoader().getResource("http://www.woaiguozhi.top/pan/Files/xml.xml");
-        int i = xmlBeanDefinitionReader.loadBeanDefinitions(resource);
+        xmlBeanDefinitionReader.loadBeanDefinitions(resource);
         User user = beanFactory.getBean("user", User.class, "xiaoming", 12, new Pet("str", 12));
         System.out.println(user);
         System.out.println(user.getClass().getSuperclass());
@@ -256,5 +256,20 @@ public class test {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("xml1.xml");
         A a = context.getBean("a", A.class);
         B b = context.getBean("b", B.class);
+    }
+
+    @Test
+    public void test18() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("bean01.xml");
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
+//        System.out.println(beanFactory.getSingletonObjects());
+        Pet pet = context.getBean("pet", Pet.class);
+
+        User user = context.getBean("user", User.class);
+        System.out.println(user.getName());
+        System.out.println(pet.getAge());
+        System.out.println(pet.getName());
+        System.out.println(pet);
+        System.out.println(user.getPet());
     }
 }

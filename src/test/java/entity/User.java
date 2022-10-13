@@ -13,12 +13,12 @@ import java.util.List;
 //@Data
 @Component
 public class User implements MethodTest {
-    //    @Value("${age}")
+//    @Value("${age}")
     int age;
-    @Value("${name}")
+    //    @Value("${name}")
     String name;
-    @Autowired
-    @Qualifier("${petId}")
+    //    @Autowired
+//    @Qualifier("${petId}")
     Pet pet;
 
 

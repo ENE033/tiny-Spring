@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import springframework.beans.BeansException;
 import springframework.beans.factory.config.BeanDefinition;
 import springframework.beans.factory.support.BeanDefinitionRegistry;
-import springframework.beans.factory.support.GenericBeanDefinition;
 import springframework.stereotype.Component;
 
 import java.util.Set;
@@ -18,8 +17,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
         this.registry = registry;
     }
 
-    public int doScan(String... basePackages) {
-        int beanSize = 0;
+    public void doScan(String... basePackages) {
         // 遍历类路径
         for (String basePackage : basePackages) {
             Set<BeanDefinition> candidateComponents = findCandidateComponents(basePackage);
@@ -28,21 +26,50 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
                 beanDefinition.setScope(resolveBeanScope(beanDefinition));
                 // 确定bean的id
                 String beanName = determineBeanName(beanDefinition);
-                if (registry.checkCandidate(beanName, beanDefinition)) {
+
+                if (checkCandidate(beanName, beanDefinition)) {
                     registry.registerBeanDefinition(determineBeanName(beanDefinition), beanDefinition);
-                    beanSize++;
-                } else {
-                    BeanDefinition existingBeanDefinition = registry.getBeanDefinition(beanName);
-                    if (existingBeanDefinition instanceof ScannedGenericBeanDefinition) {
-                        continue;
-                    } else {
-                        registry.mergeBeanDefinition(existingBeanDefinition, beanDefinition);
-                        registry.registerBeanDefinition(beanName, existingBeanDefinition);
-                    }
                 }
             }
         }
-        return beanSize;
+    }
+
+    /**
+     * 检查beanName是否存在，如果存在是否兼容
+     *
+     * @param beanName
+     * @param beanDefinition
+     * @return true：beanName尚未注册，
+     * false：beanName已经注册，但是beanName注册的beanDefinition与新的beanDefinition兼容
+     * @throws BeansException 两个beanDefinition不兼容
+     */
+    public boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws BeansException {
+        // 如果beanName对应的BeanDefinition不存在，返回true
+        if (!registry.containsBeanDefinition(beanName)) {
+            return true;
+        }
+        BeanDefinition existingDef = registry.getBeanDefinition(beanName);
+        // 如果两个beanDefinition兼容，返回false，不兼容则抛异常
+        if (isCompatible(beanDefinition, existingDef)) {
+            return false;
+        } else {
+            throw new BeansException(" Duplicate beanName '" + beanName + "' is not allowed ");
+        }
+    }
+
+
+    /**
+     * 判断两个beanDefinition是否兼容
+     *
+     * @param newDefinition
+     * @param existingDefinition
+     * @return 如果existingDefinition不是一个ScannedGenericBeanDefinition，则不能兼容，返回false
+     */
+    public boolean isCompatible(BeanDefinition newDefinition, BeanDefinition existingDefinition) {
+        if (!(existingDefinition instanceof ScannedGenericBeanDefinition)) {
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -16,6 +16,10 @@ import springframework.beans.factory.config.BeanDefinition;
  */
 public class GenericBeanDefinition extends BeanDefinition {
 
+    public GenericBeanDefinition() {
+        super(null);
+    }
+
     public GenericBeanDefinition(Class<?> beanClass) {
         super(beanClass);
     }

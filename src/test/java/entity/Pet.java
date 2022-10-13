@@ -1,12 +1,15 @@
 package entity;
 
 import springframework.beans.factory.annotation.Autowired;
+import springframework.beans.factory.annotation.Value;
 import springframework.stereotype.Component;
 
 @Component
 public class Pet {
 
+    @Value("toewm")
     String name;
+    @Value("7894")
     int age;
 
     public String getName() {
